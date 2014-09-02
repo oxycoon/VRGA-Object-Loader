@@ -20,6 +20,7 @@
 
 #include "util.h"
 #include "model.h"
+#include "shader.h"
 
 #define PROGRAM_NAME "MeshLoader"
 
@@ -31,6 +32,8 @@ glm::mat4 projectionmatrix = glm::perspective((float)M_PI_4, 1.0f, 0.1f, 100.0f)
 GLuint vao, vbo[1];
 // These are handles used to reference the shaders
 GLuint vertexshader, fragmentshader;
+
+Shader shader;
 
 void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize SDL's Video subsystem
@@ -71,6 +74,7 @@ void drawscene(SDL_Window *window)
 {
   glm::mat4 modelmatrix = glm::mat4();
   modelmatrix = glm::translate(modelmatrix, glm::vec3(0.f, 0.f, -5.0f));
+
 
   // multiply our modelmatrix and our projectionmatrix.
   // Results are stored in modelmatrix
@@ -114,8 +118,8 @@ void initScene()
   std::vector<Vertex> model;
   std::vector<GLushort> elements;
 
-  // These pointers will receive the contents of our shader source code files
-  GLchar *vertexsource, *fragmentsource;
+//  // These pointers will receive the contents of our shader source code files
+//  GLchar *vertexsource, *fragmentsource;
 
   // Allocate and assign a Vertex Array Object to our handle
   glGenVertexArrays(1, &vao);
@@ -146,46 +150,56 @@ void initScene()
   // Enable attribute index 0 as being used
   glEnableVertexAttribArray(0);
 
-  glVertexAttribPointer ( ( GLuint ) 1, 3, GL_FLOAT, GL_FALSE, 
-			  sizeof ( struct Vertex ), 
-			  ( const GLvoid *) offsetof(struct Vertex, color)  );
+  glVertexAttribPointer ( ( GLuint ) 1, 3, GL_FLOAT, GL_FALSE,
+              sizeof ( struct Vertex ),
+              ( const GLvoid *) offsetof(struct Vertex, color)  );
 
   // Enable attribute index 1 as being used
-  glEnableVertexAttribArray ( 1 );  
+  glEnableVertexAttribArray ( 1 );
 
-  // Read our shaders into the appropriate buffers
-  vertexsource = filetobuf("res/shaders/simple.vert");
-  fragmentsource = filetobuf("res/shaders/simple.frag");
+//  // Read our shaders into the appropriate buffers
+//  vertexsource = filetobuf("res/shaders/simple.vert");
+//  fragmentsource = filetobuf("res/shaders/simple.frag");
 
-  // Assign our handles a "name" to new shader objects
-  vertexshader = glCreateShader(GL_VERTEX_SHADER);
-  fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
+//  // Assign our handles a "name" to new shader objects
+//  vertexshader = glCreateShader(GL_VERTEX_SHADER);
+//  fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
 
-  // Associate the source code buffers with each handle
-  glShaderSource(vertexshader, 1, (const GLchar **)&vertexsource, 0);
-  glShaderSource(fragmentshader, 1, (const GLchar **)&fragmentsource, 0);
+//  // Associate the source code buffers with each handle
+//  glShaderSource(vertexshader, 1, (const GLchar **)&vertexsource, 0);
+//  glShaderSource(fragmentshader, 1, (const GLchar **)&fragmentsource, 0);
 
-  // Compile our shader objects
-  glCompileShader(vertexshader);
-  glCompileShader(fragmentshader);
+//  // Compile our shader objects
+//  glCompileShader(vertexshader);
+//  glCompileShader(fragmentshader);
 
-  // Assign our program handle a "name"
-  shaderprogram = glCreateProgram();
+//  // Assign our program handle a "name"
+//  shaderprogram = glCreateProgram();
 
-  // Attach our shaders to our program
-  glAttachShader(shaderprogram, vertexshader);
-  glAttachShader(shaderprogram, fragmentshader);
+//  // Attach our shaders to our program
+//  glAttachShader(shaderprogram, vertexshader);
+//  glAttachShader(shaderprogram, fragmentshader);
 
-  // Bind attribute 0 to in_Position and attribute 1 (colors) to in_Color
-  glBindAttribLocation(shaderprogram, 0, "in_Position");
-  glBindAttribLocation(shaderprogram, 1, "in_Color");
+//  // Bind attribute 0 to in_Position and attribute 1 (colors) to in_Color
+//  glBindAttribLocation(shaderprogram, 0, "in_Position");
+//  glBindAttribLocation(shaderprogram, 1, "in_Color");
 
-  // Link our program, and set it as being actively used
-  glLinkProgram(shaderprogram);
-  glUseProgram(shaderprogram);
+//  // Link our program, and set it as being actively used
+//  glLinkProgram(shaderprogram);
+//  glUseProgram(shaderprogram);
 
-  free(vertexsource);
-  free(fragmentsource);
+//  free(vertexsource);
+//  free(fragmentsource);
+  shader.initShader("res/shaders/simple");
+
+  glBindAttribLocation(shader.getProg(), 0, "in_Position");
+  glBindAttribLocation(shader.getProg(), 1, "in_Color");
+
+  shader.enable();
+
+
+
+
 }
 
 void resizeWindow(SDL_Window *window, int w, int h)
