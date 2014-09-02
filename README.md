@@ -34,3 +34,7 @@ Feel free to take ideas from other places, but please attribute them in the manu
 
 <h1>Extras</h1>
 Fog, Particles, Texture, Animation, full OBJ compatibility 
+
+<h1>Dependencies</h1>
+OpenGL 3.2
+SDL2

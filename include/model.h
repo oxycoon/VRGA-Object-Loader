@@ -40,7 +40,7 @@ private:
 
     char* path;
 
-    void loadModel();
+    bool loadModel();
 
 };
 

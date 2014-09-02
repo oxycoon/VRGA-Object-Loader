@@ -26,6 +26,10 @@ if(NOT OPENGL_FOUND)
     message(ERROR " OPENGL not found!")
 endif(NOT OPENGL_FOUND)
 
+aux_source_directory(app MAIN)
+aux_source_directory(src SRC_LIST)
+include_directories(include)
 
-add_executable(MeshLoader main.cc util.cc model.cpp)
+#add_executable(MeshLoader main.cc util.cc model.cpp)
+add_executable(MeshLoader ${SRC_LIST} ${MAIN})
 target_link_libraries(MeshLoader ${OPENGL_LIBRARIES} ${SDL2_LIBRARY} )
