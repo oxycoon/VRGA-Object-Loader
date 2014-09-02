@@ -27,5 +27,5 @@ if(NOT OPENGL_FOUND)
 endif(NOT OPENGL_FOUND)
 
 
-add_executable(MeshLoader main.cc util.cc loader.cpp model.cpp)
+add_executable(MeshLoader main.cc util.cc model.cpp)
 target_link_libraries(MeshLoader ${OPENGL_LIBRARIES} ${SDL2_LIBRARY} )

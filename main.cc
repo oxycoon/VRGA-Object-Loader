@@ -19,7 +19,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "util.h"
-#include "loader.h"
+#include "model.h"
 
 #define PROGRAM_NAME "MeshLoader"
 
@@ -31,7 +31,6 @@ glm::mat4 projectionmatrix = glm::perspective((float)M_PI_4, 1.0f, 0.1f, 100.0f)
 GLuint vao, vbo[1];
 // These are handles used to reference the shaders
 GLuint vertexshader, fragmentshader;
-Loader loader;
 
 void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize SDL's Video subsystem
@@ -61,7 +60,7 @@ void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
 
 }
 
-//struct Vertex
+//struct Vertex;
 //{
 //  GLfloat position[3];
 //  GLfloat color[3];
@@ -115,11 +114,6 @@ void initScene()
   std::vector<Vertex> model;
   std::vector<GLushort> elements;
 
-  loader.load("res/models/garg.obj", model, elements);
-
-
-
-
   // These pointers will receive the contents of our shader source code files
   GLchar *vertexsource, *fragmentsource;
 
@@ -138,10 +132,10 @@ void initScene()
 
   // Copy the vertex data from tetrahedron to our buffer 12 * sizeof(GLfloat)
   // is the size of the tetrahedrom array, since it contains 12 Vertex values
-//  glBufferData ( GL_ARRAY_BUFFER, 12 * sizeof ( struct Vertex ), tetrahedron,
-//                 GL_STATIC_DRAW );
-  glBufferData ( GL_ARRAY_BUFFER, model.size() * sizeof ( struct Vertex ), &model.front(),
+  glBufferData ( GL_ARRAY_BUFFER, 12 * sizeof ( struct Vertex ), tetrahedron,
                  GL_STATIC_DRAW );
+//  glBufferData ( GL_ARRAY_BUFFER, model.size() * sizeof ( struct Vertex ), &model.front(),
+//                 GL_STATIC_DRAW );
 
   // Specify that our coordinate data is going into attribute index 0, and
   // contains three doubles per vertex
