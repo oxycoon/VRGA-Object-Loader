@@ -34,6 +34,8 @@ GLuint vao, vbo[1];
 GLuint vertexshader, fragmentshader;
 
 Shader shader;
+Model mod;
+std::vector<Model> modelList;
 
 void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize SDL's Video subsystem
@@ -90,7 +92,9 @@ void drawscene(SDL_Window *window)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Invoke glDrawArrays telling that our data consists of individual triangles
-  glDrawArrays(GL_TRIANGLES, 0, 12);
+  //glDrawArrays(GL_TRIANGLES, 0, mod.getVertics().size()-1);
+  for(Model mo: modelList)
+      mo.render();
 
   // Swap our buffers to make our changes visible
   SDL_GL_SwapWindow(window);
@@ -101,10 +105,10 @@ void initScene()
   // An array of 12 Vertices to make 4 coloured triangles
   // in the shape of a tetrahedron
   const struct Vertex v[4]  = {
-    {{ 1.0f,  1.0f,  1.0f }, { 0.0f, 1.0f, 1.0f }},
-    {{ -1.0f, -1.0f,  1.0f }, { 1.0f, 0.0f, 1.0f }},
-    {{ -1.0f,  1.0f, -1.0f }, { 1.0f, 1.0f, 0.0f }},
-    {{ 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f, 1.0f }}
+    {{ 1.0f,  1.0f,  1.0f }, { 0.0f, 1.0f, 1.0f }, {0.0f, 0.0f, 1.0f}},
+    {{ -1.0f, -1.0f,  1.0f }, { 1.0f, 0.0f, 1.0f }, {0.0f, 0.0f, 1.0f}},
+    {{ -1.0f,  1.0f, -1.0f }, { 1.0f, 1.0f, 0.0f }, {0.0f, 0.0f, 1.0f}},
+    {{ 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f, 1.0f }, {0.0f, 0.0f, 1.0f}}
   };
 
   const struct Vertex tetrahedron[12] =
@@ -115,11 +119,10 @@ void initScene()
     v[1], v[2], v[3]
   };
 
-  std::vector<Vertex> model;
-  std::vector<GLushort> elements;
+  mod.setPath("res/models/garg.obj");
+  mod.init();
+  modelList.push_back(mod);
 
-//  // These pointers will receive the contents of our shader source code files
-//  GLchar *vertexsource, *fragmentsource;
 
   // Allocate and assign a Vertex Array Object to our handle
   glGenVertexArrays(1, &vao);
@@ -136,10 +139,10 @@ void initScene()
 
   // Copy the vertex data from tetrahedron to our buffer 12 * sizeof(GLfloat)
   // is the size of the tetrahedrom array, since it contains 12 Vertex values
-  glBufferData ( GL_ARRAY_BUFFER, 12 * sizeof ( struct Vertex ), tetrahedron,
-                 GL_STATIC_DRAW );
-//  glBufferData ( GL_ARRAY_BUFFER, model.size() * sizeof ( struct Vertex ), &model.front(),
+//  glBufferData ( GL_ARRAY_BUFFER, 12 * sizeof ( struct Vertex ), tetrahedron,
 //                 GL_STATIC_DRAW );
+  glBufferData ( GL_ARRAY_BUFFER, mod.getVertics().size() * sizeof ( struct Vertex ), &mod.getVertics().front(),
+                 GL_STATIC_DRAW );
 
   // Specify that our coordinate data is going into attribute index 0, and
   // contains three doubles per vertex
@@ -157,45 +160,53 @@ void initScene()
   // Enable attribute index 1 as being used
   glEnableVertexAttribArray ( 1 );
 
-//  // Read our shaders into the appropriate buffers
-//  vertexsource = filetobuf("res/shaders/simple.vert");
-//  fragmentsource = filetobuf("res/shaders/simple.frag");
 
-//  // Assign our handles a "name" to new shader objects
-//  vertexshader = glCreateShader(GL_VERTEX_SHADER);
-//  fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
+  // These pointers will receive the contents of our shader source code files
+  GLchar *vertexsource, *fragmentsource;
 
-//  // Associate the source code buffers with each handle
-//  glShaderSource(vertexshader, 1, (const GLchar **)&vertexsource, 0);
-//  glShaderSource(fragmentshader, 1, (const GLchar **)&fragmentsource, 0);
+  // Read our shaders into the appropriate buffers
+  vertexsource = filetobuf("res/shaders/simple.vert");
+  fragmentsource = filetobuf("res/shaders/simple.frag");
 
-//  // Compile our shader objects
-//  glCompileShader(vertexshader);
-//  glCompileShader(fragmentshader);
+  // Assign our handles a "name" to new shader objects
+  vertexshader = glCreateShader(GL_VERTEX_SHADER);
+  fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
 
-//  // Assign our program handle a "name"
-//  shaderprogram = glCreateProgram();
+  // Associate the source code buffers with each handle
+  glShaderSource(vertexshader, 1, (const GLchar **)&vertexsource, 0);
+  glShaderSource(fragmentshader, 1, (const GLchar **)&fragmentsource, 0);
 
-//  // Attach our shaders to our program
-//  glAttachShader(shaderprogram, vertexshader);
-//  glAttachShader(shaderprogram, fragmentshader);
+  // Compile our shader objects
+  glCompileShader(vertexshader);
+  glCompileShader(fragmentshader);
 
-//  // Bind attribute 0 to in_Position and attribute 1 (colors) to in_Color
-//  glBindAttribLocation(shaderprogram, 0, "in_Position");
-//  glBindAttribLocation(shaderprogram, 1, "in_Color");
+  // Assign our program handle a "name"
+  shaderprogram = glCreateProgram();
 
-//  // Link our program, and set it as being actively used
-//  glLinkProgram(shaderprogram);
-//  glUseProgram(shaderprogram);
+  // Attach our shaders to our program
+  glAttachShader(shaderprogram, vertexshader);
+  glAttachShader(shaderprogram, fragmentshader);
 
-//  free(vertexsource);
-//  free(fragmentsource);
-  shader.initShader("res/shaders/simple");
+  // Bind attribute 0 to in_Position and attribute 1 (colors) to in_Color
+  glBindAttribLocation(shaderprogram, 0, "in_Position");
+  glBindAttribLocation(shaderprogram, 1, "in_Color");
 
-  glBindAttribLocation(shader.getProg(), 0, "in_Position");
-  glBindAttribLocation(shader.getProg(), 1, "in_Color");
+  // Link our program, and set it as being actively used
+  glLinkProgram(shaderprogram);
+  glUseProgram(shaderprogram);
 
-  shader.enable();
+  free(vertexsource);
+  free(fragmentsource);
+
+
+
+//  ///MY SHADER
+//  shader.initShader("res/shaders/simple");
+
+//  glBindAttribLocation(shader.getProg(), 0, "in_Position");
+//  glBindAttribLocation(shader.getProg(), 1, "in_Color");
+
+//  shader.enable();
 
 
 

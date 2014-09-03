@@ -148,8 +148,8 @@ bool Shader::initShader(char *path)
         free(infoLog);
     }
 
-//    cout << vsSource_ << endl;
-//    cout << fsSource_ << endl;
+    cout << vsSource_ << endl;
+    cout << fsSource_ << endl;
 
     if (!linked)
         return false;

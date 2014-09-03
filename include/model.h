@@ -31,12 +31,22 @@ public:
     Model();
     Model(char* path);
 
+    std::vector<Vertex> getVertics(){return vertices;}
+    void setPath(char* newPath){path = newPath;}
+
     void init();
     void render();
+    void update();
+
+
+
+protected:
+    glm::mat4 matrix_;
 
 private:
     std::vector<Vertex> vertices;
     std::vector<GLushort> elements;
+    GLuint id;
 
     char* path;
 

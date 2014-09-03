@@ -10,11 +10,13 @@
 Model::Model()
 {
     path = "";
+    matrix_ = glm::mat4();
 }
 
 Model::Model(char *path)
 {
     this->path = path;
+    matrix_ = glm::mat4();
 }
 
 void Model::init()
@@ -29,6 +31,14 @@ void Model::init()
 }
 
 void Model::render()
+{
+    glPushMatrix();
+    glMultMatrixf(glm::value_ptr(matrix_));
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+    glPopMatrix();
+}
+
+void Model::update()
 {
 
 }
@@ -71,27 +81,29 @@ bool Model::loadModel()
         else if(line[0] == '#'){}
         else {}
 
-        for(int i = 0; i < elements.size(); i+= 3)
-        {
-            GLushort a = elements[i];
-            GLushort b = elements[i+1];
-            GLushort c = elements[i+2];
 
-            //TODO: optimalize
-            glm::vec3 vec1 = glm::vec3(vertices[b].position[0] - vertices[a].position[0],
-                                    vertices[b].position[1] - vertices[a].position[1],
-                                    vertices[b].position[2] - vertices[a].position[2]);
-            glm::vec3 vec2 = glm::vec3(vertices[c].position[0] - vertices[a].position[0],
-                                    vertices[c].position[1] - vertices[a].position[1],
-                                    vertices[c].position[2] - vertices[a].position[2]);
-
-            glm::vec3 normal = glm::normalize(glm::cross(vec1, vec2));
-            vertices[a].normal[0] = vertices[b].normal[0] = vertices[c].normal[0] = normal.x;
-            vertices[a].normal[1] = vertices[b].normal[1] = vertices[c].normal[1] = normal.y;
-            vertices[a].normal[2] = vertices[b].normal[2] = vertices[c].normal[2] = normal.z;
-            //ENDTODO
-        }
 
     }
+    for(int i = 0; i < elements.size(); i+= 3)
+    {
+        GLushort a = elements[i];
+        GLushort b = elements[i+1];
+        GLushort c = elements[i+2];
+
+        //TODO: optimalize
+        glm::vec3 vec1 = glm::vec3(vertices[b].position[0] - vertices[a].position[0],
+                                vertices[b].position[1] - vertices[a].position[1],
+                                vertices[b].position[2] - vertices[a].position[2]);
+        glm::vec3 vec2 = glm::vec3(vertices[c].position[0] - vertices[a].position[0],
+                                vertices[c].position[1] - vertices[a].position[1],
+                                vertices[c].position[2] - vertices[a].position[2]);
+
+        glm::vec3 normal = glm::normalize(glm::cross(vec1, vec2));
+        vertices[a].normal[0] = vertices[b].normal[0] = vertices[c].normal[0] = normal.x;
+        vertices[a].normal[1] = vertices[b].normal[1] = vertices[c].normal[1] = normal.y;
+        vertices[a].normal[2] = vertices[b].normal[2] = vertices[c].normal[2] = normal.z;
+        //ENDTODO
+    }
+
     return true;
 }
