@@ -210,6 +210,7 @@ void initScene()
   // Bind attribute 0 to in_Position and attribute 1 (colors) to in_Color
   glBindAttribLocation(shaderprogram, 0, "in_Position");
   glBindAttribLocation(shaderprogram, 1, "in_Color");
+  glBindAttribLocation(shaderprogram, 2, "in_Normal");
 
   // Link our program, and set it as being actively used
   glLinkProgram(shaderprogram);

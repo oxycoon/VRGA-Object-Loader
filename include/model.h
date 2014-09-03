@@ -34,7 +34,7 @@ public:
     Model();
     Model(char* path);
 
-    std::vector<Vertex> getVertices(){return vertices;}
+    std::vector<Vertex> getVertices(){return vertices_;}
     void setPath(char* newPath){path = newPath;}
     void toggleHide();
 
@@ -48,8 +48,9 @@ protected:
     glm::mat4 matrix_;
 
 private:
-    std::vector<Vertex> vertices;
-    std::vector<GLushort> elements;
+    std::vector<Vertex> vertices_;
+    std::vector<GLuint> indices_;
+    std::vector<GLuint> elements_;
     GLuint id;
 
     char* path;
