@@ -20,9 +20,12 @@
 
 struct Vertex
 {
-  GLfloat position[3];
-  GLfloat color[3];
-  GLfloat normal[3];
+    glm::vec3 position;
+    glm::vec3 color;
+    glm::vec3 normal;
+//  GLfloat position[3];
+//  GLfloat color[3];
+//  GLfloat normal[3];
 };
 
 class Model
@@ -31,8 +34,9 @@ public:
     Model();
     Model(char* path);
 
-    std::vector<Vertex> getVertics(){return vertices;}
+    std::vector<Vertex> getVertices(){return vertices;}
     void setPath(char* newPath){path = newPath;}
+    void toggleHide();
 
     void init();
     void render();
@@ -49,6 +53,7 @@ private:
     GLuint id;
 
     char* path;
+    bool hide;
 
     bool loadModel();
 

@@ -2,6 +2,7 @@
 #include <string>
 #include <stddef.h>
 #include <cmath>
+#include <memory>
 
 // Ensure we are using opengl's core profile only
 #define GL3_PROTOTYPES 1
@@ -21,6 +22,7 @@
 #include "util.h"
 #include "model.h"
 #include "shader.h"
+#include "scene.h"
 
 #define PROGRAM_NAME "MeshLoader"
 
@@ -34,8 +36,9 @@ GLuint vao, vbo[1];
 GLuint vertexshader, fragmentshader;
 
 Shader shader;
-Model mod;
-std::vector<Model> modelList;
+//Model mod;
+//std::vector<Model> modelList;
+Scene scene;
 
 void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) // Initialize SDL's Video subsystem
@@ -93,8 +96,7 @@ void drawscene(SDL_Window *window)
 
   // Invoke glDrawArrays telling that our data consists of individual triangles
   //glDrawArrays(GL_TRIANGLES, 0, mod.getVertics().size()-1);
-  for(Model mo: modelList)
-      mo.render();
+  scene.render();
 
   // Swap our buffers to make our changes visible
   SDL_GL_SwapWindow(window);
@@ -119,46 +121,64 @@ void initScene()
     v[1], v[2], v[3]
   };
 
-  mod.setPath("res/models/garg.obj");
-  mod.init();
-  modelList.push_back(mod);
 
 
-  // Allocate and assign a Vertex Array Object to our handle
-  glGenVertexArrays(1, &vao);
 
-  // Bind our Vertex Array Object as the current used object
-  glBindVertexArray(vao);
+  scene.init();
 
-  // Allocate and assign One Vertex Buffer Object to our handle
-  glGenBuffers(1, vbo);
+  std::shared_ptr<Model> mod;
+  mod.reset(new Model("res/models/garg.obj"));
+  mod->init();
+  //mod->toggleHide();
+  scene.addSceneObject(mod);
 
-  // Bind our VBO as being the active buffer and storing vertex attributes
-  // (coordinates + colors)
-  glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+//  mod.reset(new Model("res/models/chest/chest.obj"));
+//  mod->init();
+//  mod->toggleHide();
+//  scene.addSceneObject(mod);
+//  // Allocate and assign a Vertex Array Object to our handle
+//  glGenVertexArrays(1, &vao);
+
+//  // Bind our Vertex Array Object as the current used object
+//  glBindVertexArray(vao);
+
+//  // Allocate and assign One Vertex Buffer Object to our handle
+//  glGenBuffers(1, vbo);
+
+//  // Bind our VBO as being the active buffer and storing vertex attributes
+//  // (coordinates + colors)
+//  glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 
   // Copy the vertex data from tetrahedron to our buffer 12 * sizeof(GLfloat)
   // is the size of the tetrahedrom array, since it contains 12 Vertex values
 //  glBufferData ( GL_ARRAY_BUFFER, 12 * sizeof ( struct Vertex ), tetrahedron,
 //                 GL_STATIC_DRAW );
-  glBufferData ( GL_ARRAY_BUFFER, mod.getVertics().size() * sizeof ( struct Vertex ), &mod.getVertics().front(),
+  glBufferData ( GL_ARRAY_BUFFER, mod->getVertices().size() * sizeof ( struct Vertex ), &mod->getVertices().front(),
                  GL_STATIC_DRAW );
 
-  // Specify that our coordinate data is going into attribute index 0, and
-  // contains three doubles per vertex
-  glVertexAttribPointer( (GLuint)0, 3, GL_FLOAT, GL_FALSE,
-                         sizeof ( struct Vertex ),
-                         (void *) offsetof (struct Vertex, position) );
+//  // Specify that our coordinate data is going into attribute index 0, and
+//  // contains three doubles per vertex
+//  glVertexAttribPointer( (GLuint)0, 3, GL_FLOAT, GL_FALSE,
+//                         sizeof ( struct Vertex ),
+//                         (void *) offsetof (struct Vertex, position) );
 
-  // Enable attribute index 0 as being used
-  glEnableVertexAttribArray(0);
+//  // Enable attribute index 0 as being used
+//  glEnableVertexAttribArray(0);
 
-  glVertexAttribPointer ( ( GLuint ) 1, 3, GL_FLOAT, GL_FALSE,
-              sizeof ( struct Vertex ),
-              ( const GLvoid *) offsetof(struct Vertex, color)  );
+//  glVertexAttribPointer ( ( GLuint ) 1, 3, GL_FLOAT, GL_FALSE,
+//              sizeof ( struct Vertex ),
+//              ( const GLvoid *) offsetof(struct Vertex, color)  );
 
-  // Enable attribute index 1 as being used
-  glEnableVertexAttribArray ( 1 );
+//  // Enable attribute index 1 as being used
+//  glEnableVertexAttribArray ( 1 );
+
+//  glVertexAttribPointer ( ( GLuint ) 2, 3, GL_FLOAT, GL_FALSE,
+//              sizeof ( struct Vertex ),
+//              ( const GLvoid *) offsetof(struct Vertex, normal)  );
+
+//  // Enable attribute index 1 as being used
+//  glEnableVertexAttribArray ( 2 );
+
 
 
   // These pointers will receive the contents of our shader source code files
@@ -244,7 +264,7 @@ void mainloop(SDL_Window *window)
       }
     }
     // logic
-
+    scene.update();
     // render
     drawscene(window);
     SDL_Delay(33);

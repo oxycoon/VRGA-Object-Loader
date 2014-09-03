@@ -129,7 +129,8 @@ bool Shader::initShader(char *path)
     glAttachShader(prog_, vs_);
     glAttachShader(prog_, fs_);
 
-
+//      glBindAttribLocation(prog_, 0, "in_Position");
+//      glBindAttribLocation(prog_, 1, "in_Color");
 
     //Link program and print log
     glLinkProgram(prog_);
