@@ -17,7 +17,7 @@ void main(void) {
 	vec3 eyeVector = vec3(0.0, 0.0, 1.0);
 	vec3 halfVector = normalize(lightVector + eyeVector);
 
-	vect3 diffuse = vec3(max(0.5*dot(normalVector, lightVector), 0.5)) * diffuseMaterial;
+	vec3 diffuse = vec3(max(0.5*dot(normalVector, lightVector), 0.5)) * diffuseMaterial;
 
 	vec3 specular = vec3(max(dot(normalVector, halfVector), 0.0));
 	specular = pow(specular.x, 32) * specularMaterial;

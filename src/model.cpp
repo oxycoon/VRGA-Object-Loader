@@ -43,17 +43,25 @@ void Model::init()
 
 void Model::render()
 {
-    if(!hide)
-    {
+//    if(!hide)
+//    {
         glPushMatrix();
         glMultMatrixf(glm::value_ptr(matrix_));
 
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
 
+
+        glBindBuffer(GL_ARRAY_BUFFER, idVBO_);
+        glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+        glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, color));
 
         glDrawArrays(GL_TRIANGLES, 0, vertices_.size());
 
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(0);
         glPopMatrix();
-    }
+    //}
 }
 
 void Model::update()
@@ -146,12 +154,12 @@ bool Model::loadModel()
 
 void Model::initBuffer()
 {
-    //glGenBuffers(1, &idVBO);
-    //glBindBuffer(GL_ARRAY_BUFFER, idVBO);
+    glGenBuffers(1, &idVBO_);
+    glBindBuffer(GL_ARRAY_BUFFER, idVBO_);
     glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof (Vertex), vertices_.data(), GL_STATIC_DRAW);
 
 
-    glGenBuffers(1, &idNBO_);
-    glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
-    glBufferData(GL_ARRAY_BUFFER, normalIndex_.size() * sizeof(glm::vec3), &vertices_.front(), GL_STATIC_DRAW);
+//    glGenBuffers(1, &idNBO_);
+//    glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
+//    glBufferData(GL_ARRAY_BUFFER, normalIndex_.size() * sizeof(glm::vec3), &vertices_.front(), GL_STATIC_DRAW);
 }
