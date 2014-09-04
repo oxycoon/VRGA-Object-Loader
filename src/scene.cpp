@@ -1,6 +1,7 @@
 #include "scene.h"
 
 #include "model.h"
+//#include "camera.h"
 
 Scene::Scene()
 {
@@ -17,6 +18,7 @@ void Scene::render()
 
 void Scene::update()
 {
+    //this->world_ = cam_->getMatrix();
 
     //Adds new scene objects to the scene.
     for(std::vector<std::shared_ptr<Model> >::iterator it = newChildren_.begin();

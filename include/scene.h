@@ -24,6 +24,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 class Model;
+//class Camera;
 
 class Scene
 {

@@ -69,6 +69,7 @@ void Model::render()
 
 void Model::update()
 {
+    //matrix_ = glm::
 
 }
 
@@ -82,7 +83,7 @@ bool Model::loadModel()
 {
     std::vector<glm::vec3> vert;
     std::vector<glm::vec3> norm;
-    std::vector<glm::vec2> texCoord; //Not positionyet implemented.
+    std::vector<glm::vec2> texCoord; //Not yet implemented.
 
     std::ifstream file(path, std::ios::in);
     if(!file)
