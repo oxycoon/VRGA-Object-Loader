@@ -14,9 +14,8 @@ Model::Model()
     hide = false;
 }
 
-Model::Model(char *path)
+Model::Model(char *path) : path(path)
 {
-    this->path = path;
     matrix_ = glm::mat4();
     hide = false;
 }
@@ -38,7 +37,7 @@ void Model::init()
     {
 
     }
-
+    initBuffer();
 
 }
 
@@ -51,17 +50,7 @@ void Model::render()
 
 
 
-
-
-
-
-
-
         glDrawArrays(GL_TRIANGLES, 0, vertices_.size());
-
-
-
-
 
         glPopMatrix();
     }
@@ -80,49 +69,9 @@ void Model::update()
  */
 bool Model::loadModel()
 {
-//    std::vector<GLuint> vertIndex, uvIndex, normIndex;
-//    std::vector<glm::vec3> vert, norm;
-//    std::vector<glm::vec2> uv;
-
-//    FILE * file = std::fopen(path, "r");
-//    if(file == NULL)
-//    {
-//        printf("Can't open file %s\n", path);
-//        return false;
-//    }
-//    while(1)
-//    {
-//        char header[128];
-//        int res = fscanf(file, "%s", header);
-//        if(res = EOF)
-//            break;
-
-//        //Vertex
-//        if( strcmp(header, "v") == 0)
-//        {
-//            glm::vec3 vertex;
-//            fscanf(file, "%f %f %f\n")
-//        }
-//        //Texture coordinate
-//        else if( strcmp(header, "vt") == 0)
-//        {
-
-//        }
-//        //Normal
-//        else if( strcmp(header, "vn") == 0)
-//        {
-
-//        }
-
-//        else if( strcmp(header, "f") == 0)
-//        {
-
-//        }
-//    }
     std::vector<glm::vec3> vert;
     std::vector<glm::vec3> norm;
-    std::vector<glm::vec2> texCoord;
-    //std::vector<GLushort> ind;
+    std::vector<glm::vec2> texCoord; //Not yet implemented.
 
     std::ifstream file(path, std::ios::in);
     if(!file)
@@ -138,11 +87,8 @@ bool Model::loadModel()
         {
             std::istringstream s(line.substr(2));
             GLfloat x, y, z; s >> x; s >> y; s >> z;
-//            Vertex v = {{ x, y, z }, { 1.0f, 1.0f, 1.0f }, {0.0f, 0.0f, 0.0f}};
-//            vertices_.push_back(v);
             glm::vec3 temp(x,y,z);
             vert.push_back(temp);
-            //std::cout << "Added point: " << x << ", " << y << ", " << z << std::endl;
         }
         else if(line.substr(0,2) == "f ")
         {
@@ -168,6 +114,10 @@ bool Model::loadModel()
             glm::vec3 temp(x,y,z);
             norm.push_back(temp);
         }
+        else if(line.substr(0,3) == "vt ")
+        {
+            //TODO: Texture coordinates
+        }
         else if(line[0] == '#'){}
         else {}
     }
@@ -188,43 +138,20 @@ bool Model::loadModel()
     else
     {
         std::cout << "Not vertex index amount does not match normal index amount, implement manual calculation!" << std::endl;
+        return false;
     }
 
-//    //checks if each vertex has an accociated normal
-//    if(norm.size() == vert.size())
-//    {
-//        for(int i = 0; i < vert.size(); i++)
-//        {
-//            Vertex v = {vert[i], glm::vec3(1.0f, 0.5f, 1.0f), norm[i]};
-//            vertices_.push_back(v);
-//        }
-//    }
-    //calculates normals manually
-//    else
-//    {
-//        for(int i = 0; i < indices_.size(); i+= 3)
-//        {
-//            GLushort a = indices_[i];
-//            GLushort b = indices_[i+1];
-//            GLushort c = indices_[i+2];
-
-//            //TODO: optimalize
-//            glm::vec3 vec1 = glm::vec3(vertices_[b].position[0] - vertices_[a].position[0],
-//                                    vertices_[b].position[1] - vertices_[a].position[1],
-//                                    vertices_[b].position[2] - vertices_[a].position[2]);
-//            glm::vec3 vec2 = glm::vec3(vertices_[c].position[0] - vertices_[a].position[0],
-//                                    vertices_[c].position[1] - vertices_[a].position[1],
-//                                    vertices_[c].position[2] - vertices_[a].position[2]);
-
-//            glm::vec3 normal = glm::normalize(glm::cross(vec1, vec2));
-//            vertices_[a].normal[0] = vertices_[b].normal[0] = vertices_[c].normal[0] = normal.x;
-//            vertices_[a].normal[1] = vertices_[b].normal[1] = vertices_[c].normal[1] = normal.y;
-//            vertices_[a].normal[2] = vertices_[b].normal[2] = vertices_[c].normal[2] = normal.z;
-//            //ENDTODO
-//        }
-//    }
-
-    //glEnableVertexAttribArray(id);
-
     return true;
+}
+
+void Model::initBuffer()
+{
+    //glGenBuffers(1, &idVBO);
+    //glBindBuffer(GL_ARRAY_BUFFER, idVBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof (Vertex), vertices_.data(), GL_STATIC_DRAW);
+
+
+    glGenBuffers(1, &idNBO_);
+    glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
+    glBufferData(GL_ARRAY_BUFFER, normalIndex_.size() * sizeof(glm::vec3), &vertices_.front(), GL_STATIC_DRAW);
 }

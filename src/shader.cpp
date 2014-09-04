@@ -149,8 +149,12 @@ bool Shader::initShader(char *path)
         free(infoLog);
     }
 
-    cout << vsSource_ << endl;
-    cout << fsSource_ << endl;
+  glBindAttribLocation(prog_, 0, "in_Position");
+  glBindAttribLocation(prog_, 1, "in_Color");
+  glBindAttribLocation(prog_, 2, "in_Normal");
+
+//    cout << vsSource_ << endl;
+//    cout << fsSource_ << endl;
 
     if (!linked)
         return false;

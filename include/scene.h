@@ -34,6 +34,7 @@ public:
     void update();
     void init();
 
+    void addModelToScene(char* path);
     void addSceneObject(std::shared_ptr<Model> newChild);
     void removeSceneObject(const std::shared_ptr<Model> child);
     void toggleSceneObject(const std::shared_ptr<Model> child);

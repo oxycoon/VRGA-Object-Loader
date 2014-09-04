@@ -9,6 +9,7 @@ Scene::Scene()
 
 void Scene::render()
 {
+
     for(std::vector<std::shared_ptr<Model> >::iterator it = sceneObjects_.begin();
         it != sceneObjects_.end(); it++)
         (*it)->render();
@@ -28,6 +29,7 @@ void Scene::update()
 
 void Scene::init()
 {
+
     // Allocate and assign a Vertex Array Object to our handle
     glGenVertexArrays(1, &vao_);
 
@@ -63,6 +65,14 @@ void Scene::init()
 
     // Enable attribute index 2 as being used
     glEnableVertexAttribArray ( 2 );
+}
+
+void Scene::addModelToScene(char *path)
+{
+    std::shared_ptr<Model> mod;
+    mod.reset(new Model(path));
+    mod->init();
+    addSceneObject(mod);
 }
 
 /**
@@ -101,7 +111,6 @@ void Scene::toggleSceneObject(const std::shared_ptr<Model> child)
         it != sceneObjects_.end(); it++)
     if(*it == child)
     {
-        sceneObjects_.erase(it);
         break;
     }
 }

@@ -23,9 +23,6 @@ struct Vertex
     glm::vec3 position;
     glm::vec3 color;
     glm::vec3 normal;
-//  GLfloat position[3];
-//  GLfloat color[3];
-//  GLfloat normal[3];
 };
 
 class Model
@@ -52,12 +49,13 @@ private:
     std::vector<GLuint> vertexIndex_;
     std::vector<GLuint> uvIndex_;
     std::vector<GLuint> normalIndex_;
-    GLuint id;
+    GLuint id_, idVBO_, idIBO_, idNBO_;
 
     char* path;
     bool hide;
 
     bool loadModel();
+    void initBuffer();
 
 };
 

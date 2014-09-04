@@ -1,30 +1,27 @@
+#version 150
 
-varying vec3 Normal;
-
-in vec3 ex_Normal;
 in vec3 ex_Color;
+in vec3 ex_Normal;
 
 out vec4 gl_FragColor;
 
-void main () 
-{
+void main(void) {
+	//gl_FragColor = vec4(ex_Color,1.0);
 
-    vec3 lightVec = vec3(gl_LightSource[0].position);
-    vec3 diffuseMaterial = gl_FrontLightProduct[0].diffuse.xyz;
-    vec3 specularMaterial = gl_FrontLightProduct[0].specular.xyz;
-	
-    vec3 NormalVec = normalize(Normal);
-    // calculate half angle vector
-    vec3 eyeVec = vec3(0.0, 0.0, 1.0);
-    vec3 halfVec = normalize(lightVec + eyeVec);
+	vec3 lightVector = vec3(10.0, 10.0, 10.0);
+	vec3 diffuseMaterial = ex_Color;
+	vec3 specularMaterial = vec3(0.8, 0.8, 0.8);
 
-    // calculate diffuse component
-    vec3 diffuse = vec3(max(0.5*dot(NormalVec, lightVec), 0.5)) * diffuseMaterial;
+	vec3 normalVector = normalize(ex_Normal);
 
-    // calculate specular component
-    vec3 specular = vec3(max(dot(NormalVec, halfVec), 0.0));
-    specular = pow(specular.x, 32.0) * specularMaterial;
+	vec3 eyeVector = vec3(0.0, 0.0, 1.0);
+	vec3 halfVector = normalize(lightVector + eyeVector);
 
-    // combine diffuse and specular contributions and output final vertex color
-    gl_FragColor.rgb = diffuse + specular;
+	vect3 diffuse = vec3(max(0.5*dot(normalVector, lightVector), 0.5)) * diffuseMaterial;
+
+	vec3 specular = vec3(max(dot(normalVector, halfVector), 0.0));
+	specular = pow(specular.x, 32) * specularMaterial;
+
+	//gl_FragColor = vec4(ex_Color,1.0);
+	gl_FragColor = vec4(diffuse+specular, 1.0);
 }
