@@ -52,7 +52,6 @@ void Model::render()
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
 
-
         glBindBuffer(GL_ARRAY_BUFFER, idVBO_);
         //glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
         glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
@@ -139,7 +138,7 @@ bool Model::loadModel()
         for(unsigned int i = 0; i < vertexIndex_.size(); i++)
         {
             glm::vec3 tempVert = vert[vertexIndex_[i]];
-            glm::vec3 tempNorm = vert[normalIndex_[i]];
+            glm::vec3 tempNorm = norm[normalIndex_[i]];
             //glm::vec2 tempUV = vert[uvIndex_[i]];
 
             Vertex temp = {tempVert, glm::vec3(0.7f, 0.7f, 0.2f), tempNorm};
