@@ -35,36 +35,6 @@ void Scene::init()
 
     // Bind our Vertex Array Object as the current used object
     glBindVertexArray(vao_);
-
-//    // Allocate and assign One Vertex Buffer Object to our handle
-//    glGenBuffers(1, vbo_);
-
-//    // Bind our VBO as being the active buffer and storing vertex attributes
-//    // (coordinates + colors)
-//    glBindBuffer(GL_ARRAY_BUFFER, vbo_[0]);
-
-//    // Specify that our coordinate data is going into attribute index 0, and
-//    // contains three doubles per vertex
-//    glVertexAttribPointer( (GLuint)0, 3, GL_FLOAT, GL_FALSE,
-//                           sizeof ( struct Vertex ),
-//                           (void *) offsetof (struct Vertex, position) );
-
-//    // Enable attribute index 0 as being used
-//    glEnableVertexAttribArray(0);
-
-//    glVertexAttribPointer ( ( GLuint ) 1, 3, GL_FLOAT, GL_FALSE,
-//                sizeof ( struct Vertex ),
-//                ( const GLvoid *) offsetof(struct Vertex, color)  );
-
-//    // Enable attribute index 1 as being used
-//    glEnableVertexAttribArray ( 1 );
-
-//    glVertexAttribPointer ( ( GLuint ) 2, 3, GL_FLOAT, GL_FALSE,
-//                sizeof ( struct Vertex ),
-//                ( const GLvoid *) offsetof(struct Vertex, normal)  );
-
-//    // Enable attribute index 2 as being used
-//    glEnableVertexAttribArray ( 2 );
 }
 
 void Scene::addModelToScene(char *path)

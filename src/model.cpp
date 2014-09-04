@@ -50,14 +50,18 @@ void Model::render()
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
 
 
         glBindBuffer(GL_ARRAY_BUFFER, idVBO_);
+        //glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
         glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
         glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, color));
+        glVertexAttribPointer((GLuint)2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
         glDrawArrays(GL_TRIANGLES, 0, vertices_.size());
 
+        glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
         glPopMatrix();
@@ -79,7 +83,7 @@ bool Model::loadModel()
 {
     std::vector<glm::vec3> vert;
     std::vector<glm::vec3> norm;
-    std::vector<glm::vec2> texCoord; //Not yet implemented.
+    std::vector<glm::vec2> texCoord; //Not positionyet implemented.
 
     std::ifstream file(path, std::ios::in);
     if(!file)
