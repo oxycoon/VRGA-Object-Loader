@@ -146,21 +146,20 @@ bool Model::loadModel()
         }
         else if(line.substr(0,2) == "f ")
         {
+            std::stringstream ss(line.substr(2,line.length()));
+            std::string temp;
+            while(ss >> temp)
+            {
+                std::istringstream s(temp);
+                std::string vertInd, uvInd, normInd;
+                std::getline(s, vertInd, '/');
+                std::getline(s, uvInd, '/');
+                std::getline(s, normInd, ' ');
 
-            std::istringstream s(line.substr(2));
-            GLuint vertex[3], uv[3], normal[3];
-            //std::string temp = s.
-
-            s >> vertex[0]; s >> uv[0]; s >> normal[0];
-            s >> vertex[1]; s >> uv[1]; s >> normal[1];
-            s >> vertex[2]; s >> uv[2]; s >> normal[2];
-            vertex[0]--;uv[0]--;normal[0]--;
-            vertex[1]--;uv[1]--;normal[1]--;
-            vertex[2]--;uv[2]--;normal[2]--;
-//            indices_.push_back(vertex);
-//            elements_.push_back(vertex);
-//            elements_.push_back(uv);
-//            elements_.push_back(normal);
+                vertexIndex_.push_back(std::stoi(vertInd)-1);
+                uvIndex_.push_back(std::stoi(uvInd)-1);
+                normalIndex_.push_back(std::stoi(normInd)-1);
+            }
         }
         else if(line.substr(0,3) == "vn ")
         {
@@ -172,39 +171,58 @@ bool Model::loadModel()
         else if(line[0] == '#'){}
         else {}
     }
-//    //checks if each vertex has an accociated normal
-    if(norm.size() == vert.size())
+
+    if(vertexIndex_.size() == normalIndex_.size())
     {
-        for(int i = 0; i < vert.size(); i++)
+        for(unsigned int i = 0; i < vertexIndex_.size(); i++)
         {
-            Vertex v = {vert[i], glm::vec3(1.0f, 0.5f, 1.0f), norm[i]};
-            vertices_.push_back(v);
+            glm::vec3 tempVert = vert[vertexIndex_[i]];
+            glm::vec3 tempNorm = vert[normalIndex_[i]];
+            //glm::vec2 tempUV = vert[uvIndex_[i]];
+
+            Vertex temp = {tempVert, glm::vec3(0.7f, 0.7f, 0.2f), tempNorm};
+
+            vertices_.push_back(temp);
         }
     }
-    //calculates normals manually
     else
     {
-        for(int i = 0; i < indices_.size(); i+= 3)
-        {
-            GLushort a = indices_[i];
-            GLushort b = indices_[i+1];
-            GLushort c = indices_[i+2];
-
-            //TODO: optimalize
-            glm::vec3 vec1 = glm::vec3(vertices_[b].position[0] - vertices_[a].position[0],
-                                    vertices_[b].position[1] - vertices_[a].position[1],
-                                    vertices_[b].position[2] - vertices_[a].position[2]);
-            glm::vec3 vec2 = glm::vec3(vertices_[c].position[0] - vertices_[a].position[0],
-                                    vertices_[c].position[1] - vertices_[a].position[1],
-                                    vertices_[c].position[2] - vertices_[a].position[2]);
-
-            glm::vec3 normal = glm::normalize(glm::cross(vec1, vec2));
-            vertices_[a].normal[0] = vertices_[b].normal[0] = vertices_[c].normal[0] = normal.x;
-            vertices_[a].normal[1] = vertices_[b].normal[1] = vertices_[c].normal[1] = normal.y;
-            vertices_[a].normal[2] = vertices_[b].normal[2] = vertices_[c].normal[2] = normal.z;
-            //ENDTODO
-        }
+        std::cout << "Not vertex index amount does not match normal index amount, implement manual calculation!" << std::endl;
     }
+
+//    //checks if each vertex has an accociated normal
+//    if(norm.size() == vert.size())
+//    {
+//        for(int i = 0; i < vert.size(); i++)
+//        {
+//            Vertex v = {vert[i], glm::vec3(1.0f, 0.5f, 1.0f), norm[i]};
+//            vertices_.push_back(v);
+//        }
+//    }
+    //calculates normals manually
+//    else
+//    {
+//        for(int i = 0; i < indices_.size(); i+= 3)
+//        {
+//            GLushort a = indices_[i];
+//            GLushort b = indices_[i+1];
+//            GLushort c = indices_[i+2];
+
+//            //TODO: optimalize
+//            glm::vec3 vec1 = glm::vec3(vertices_[b].position[0] - vertices_[a].position[0],
+//                                    vertices_[b].position[1] - vertices_[a].position[1],
+//                                    vertices_[b].position[2] - vertices_[a].position[2]);
+//            glm::vec3 vec2 = glm::vec3(vertices_[c].position[0] - vertices_[a].position[0],
+//                                    vertices_[c].position[1] - vertices_[a].position[1],
+//                                    vertices_[c].position[2] - vertices_[a].position[2]);
+
+//            glm::vec3 normal = glm::normalize(glm::cross(vec1, vec2));
+//            vertices_[a].normal[0] = vertices_[b].normal[0] = vertices_[c].normal[0] = normal.x;
+//            vertices_[a].normal[1] = vertices_[b].normal[1] = vertices_[c].normal[1] = normal.y;
+//            vertices_[a].normal[2] = vertices_[b].normal[2] = vertices_[c].normal[2] = normal.z;
+//            //ENDTODO
+//        }
+//    }
 
     //glEnableVertexAttribArray(id);
 

@@ -49,8 +49,9 @@ protected:
 
 private:
     std::vector<Vertex> vertices_;
-    std::vector<GLuint> indices_;
-    std::vector<GLuint> elements_;
+    std::vector<GLuint> vertexIndex_;
+    std::vector<GLuint> uvIndex_;
+    std::vector<GLuint> normalIndex_;
     GLuint id;
 
     char* path;
