@@ -11,8 +11,8 @@ Scene::Scene()
 
 void Scene::render()
 {
-    world_ = glm::mat4();
-    world_ = glm::translate(world_, glm::vec3(0.f, 0.f, -5.0f));
+    world_ = camera_->getMatrix();
+    //world_ = glm::translate(world_, glm::vec3(0.f, 0.f, -5.0f));
     glm::mat4 projectionWorldMatrix = projection_ * world_;
     // Bind our modelmatrix variable to be a uniform called mvpmatrix
     // in our shaderprogram
@@ -60,8 +60,8 @@ void Scene::init()
     glBindVertexArray(vao_);
 
     // Initialize camera
-//    camera_.reset(new Camera());
-//    world_ = camera_->getMatrix();
+    camera_.reset(new Camera());
+    world_ = camera_->getMatrix();
     shader_.initShader("res/shaders/phong");
     shader_.enable();
 }

@@ -3,7 +3,7 @@
 Camera::Camera()
 {
     matrix_ = glm::mat4();
-//    matrix_ = glm::translate(glm::mat4(), glm::vec3(0.0f, -100.0f, -300.0f));
+    matrix_ = glm::translate(matrix_, glm::vec3(0.f, 0.f, -5.0f));
 //    matrix_ = glm::rotate(matrix_, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
