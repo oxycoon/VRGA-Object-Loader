@@ -16,6 +16,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#define PIOVER180 0.0174532925199
+
 class Camera
 {
 public:

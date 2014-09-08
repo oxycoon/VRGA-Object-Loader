@@ -1,15 +1,31 @@
 #include "scene.h"
 
+#include "camera.h"
 #include "model.h"
-//#include "camera.h"
 
 Scene::Scene()
 {
     world_ = glm::mat4();
+    projection_ = glm::perspective((float)M_PI_4, 1.0f, 0.1f, 100.0f);
 }
 
 void Scene::render()
 {
+    world_ = glm::mat4();
+    world_ = glm::translate(world_, glm::vec3(0.f, 0.f, -5.0f));
+    glm::mat4 projectionWorldMatrix = projection_ * world_;
+    // Bind our modelmatrix variable to be a uniform called mvpmatrix
+    // in our shaderprogram
+    glUniformMatrix4fv(glGetUniformLocation(shader_.getProg(), "mvpmatrix"), 1,
+                       GL_FALSE, glm::value_ptr(projectionWorldMatrix));
+
+    glEnable(GL_CULL_FACE);
+    glDepthFunc(GL_LESS);
+
+    // Make our background black
+    glClearColor(0.0, 0.0, 0.0, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
     for(std::vector<std::shared_ptr<Model> >::iterator it = sceneObjects_.begin();
         it != sceneObjects_.end(); it++)
@@ -18,7 +34,12 @@ void Scene::render()
 
 void Scene::update()
 {
-    //this->world_ = cam_->getMatrix();
+    //camera_->moveUp();
+    //this->world_ = camera_->getMatrix();
+
+    //world_ = glm::rotate(world_, 2.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
 
     //Adds new scene objects to the scene.
     for(std::vector<std::shared_ptr<Model> >::iterator it = newChildren_.begin();
@@ -37,6 +58,12 @@ void Scene::init()
 
     // Bind our Vertex Array Object as the current used object
     glBindVertexArray(vao_);
+
+    // Initialize camera
+//    camera_.reset(new Camera());
+//    world_ = camera_->getMatrix();
+    shader_.initShader("res/shaders/phong");
+    shader_.enable();
 }
 
 void Scene::addModelToScene(char *path)

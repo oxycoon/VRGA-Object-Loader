@@ -23,13 +23,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "shader.h"
+
+class Camera;
 class Model;
-//class Camera;
 
 class Scene
 {
 public:
     Scene();
+
+    glm::mat4 getWorld(){return world_;}
 
     void render();
     void update();
@@ -43,6 +47,9 @@ public:
 private:
     std::vector<std::shared_ptr<Model>> sceneObjects_;
     std::vector<std::shared_ptr<Model>> newChildren_;
+    std::shared_ptr<Camera> camera_;
+
+    Shader shader_;
 
     glm::mat4 world_;
     glm::mat4 projection_;

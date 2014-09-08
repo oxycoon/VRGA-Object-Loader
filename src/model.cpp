@@ -69,7 +69,7 @@ void Model::render()
 
 void Model::update()
 {
-    //matrix_ = glm::
+
 
 }
 
