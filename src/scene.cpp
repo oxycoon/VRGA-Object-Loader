@@ -39,6 +39,11 @@ void Scene::moveCameraZoomOut()
     camera_->zoomOut();
 }
 
+void Scene::moveCameraRotate(float angles, glm::vec3 rotationAxis)
+{
+    camera_->rotateCamera(angles, rotationAxis);
+}
+
 void Scene::render()
 {
 

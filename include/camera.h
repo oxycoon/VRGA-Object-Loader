@@ -35,9 +35,11 @@ public:
     void moveForward();
     void zoomIn();
     void zoomOut();
+    void rotateCamera(float angles, glm::vec3 rotationAxis);
 
 private:
     glm::mat4 matrix_;
+    glm::mat4 rotation_;
     glm::vec3 position_;
 
     glm::vec3 moveVector_;

@@ -43,6 +43,7 @@ public:
     void moveCameraRight();
     void moveCameraZoomIn();
     void moveCameraZoomOut();
+    void moveCameraRotate(float angles, glm::vec3 rotationAxis);
 
 
 

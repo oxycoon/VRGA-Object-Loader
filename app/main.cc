@@ -39,6 +39,8 @@ bool tapKey;
 int mousePosX, mousePosY;
 float moveX, moveY;
 
+int width = 512, height = 512;
+
 bool quit;
 
 Scene scene;
@@ -60,7 +62,7 @@ void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
 
   // Create our window centered at 512x512 resolution
   window = SDL_CreateWindow(PROGRAM_NAME, SDL_WINDOWPOS_CENTERED,
-                            SDL_WINDOWPOS_CENTERED, 512, 512,
+                            SDL_WINDOWPOS_CENTERED, width, height,
                             SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
   if (window == NULL) // Die if creation failed
     sdldie("Unable to create window");
@@ -97,6 +99,7 @@ void resizeWindow(int w, int h)
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    width = w; height = h;
 }
 
 //TODO optimalize
@@ -130,6 +133,19 @@ void handleKeyPresses()
     if(keyPressed[KEY_ID_A]==true)      scene.moveCameraLeft();
     if(keyPressed[KEY_ID_S]==true)      scene.moveCameraDown();
     if(keyPressed[KEY_ID_D]==true)      scene.moveCameraRight();
+
+    if(keyPressed[MOUSE_LEFT_BUTTON_DOWN])
+    {
+        glm::vec2 angle(mousePosX, mousePosY);
+        glm::vec2 speed(moveX, moveY);
+
+        float angleLength = glm::length(angle);
+        angleLength *= glm::length(speed) * 0.0001;
+
+        glm::vec3 rotation(mousePosY, mousePosX,0.0f );
+        rotation = glm::normalize(rotation);
+        scene.moveCameraRotate(angleLength, glm::normalize(rotation));
+    }
 }
 
 void mainloop(SDL_Window *window)
@@ -142,13 +158,12 @@ void mainloop(SDL_Window *window)
     // event handling
         while ( SDL_PollEvent( &event ) )
         {
-            switch ( event.type )
+            if(event.type == SDL_QUIT)
             {
-                case SDL_QUIT:
-                    quit = true;
-                    break;
+                quit = true;
+                break;
             }
-            if(event.type == SDL_WINDOWEVENT)
+            else if(event.type == SDL_WINDOWEVENT)
             {
                 switch(event.window.event)
                 {
@@ -157,20 +172,59 @@ void mainloop(SDL_Window *window)
                         break;
                 }
             }
-            if(event.type == SDL_KEYDOWN)
+            else if(event.type == SDL_KEYDOWN)
             {
                 keyDown(event);
             }
-            if(event.type == SDL_KEYUP)
+            else if(event.type == SDL_KEYUP)
             {
                 keyUp(event);
             }
-            if(event.type == SDL_MOUSEWHEEL)
+            else if(event.type == SDL_MOUSEWHEEL)
             {
                 if(event.wheel.y > 0)
                     scene.moveCameraZoomIn();
                 if(event.wheel.y < 0)
                     scene.moveCameraZoomOut();
+            }
+            else if(event.type == SDL_MOUSEMOTION)
+            {
+                mousePosX = event.motion.x - width/2;
+                mousePosY = event.motion.y - height/2;
+                moveX = event.motion.xrel;
+                moveY = event.motion.yrel;
+                //std::cout << "Mouse position: " << mousePosX << "," << mousePosY << std::endl;
+                //std::cout << "Mouse move: " << moveX << "," << moveY << std::endl;
+            }
+            else if(event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                if(event.button.button == SDL_BUTTON_LEFT)
+                {
+                    keyPressed[MOUSE_LEFT_BUTTON_DOWN] = true;
+                }
+                else if(event.button.button == SDL_BUTTON_RIGHT)
+                {
+                    keyPressed[MOUSE_RIGHT_BUTTON_DOWN] = true;
+                }
+                else if(event.button.button == SDL_BUTTON_MIDDLE)
+                {
+                    keyPressed[MOUSE_MIDDLE_BUTTON_DOWN] = true;
+                }
+            }
+            else if(event.type == SDL_MOUSEBUTTONUP)
+            {
+                if(event.button.button == SDL_BUTTON_LEFT)
+                {
+                    keyPressed[MOUSE_LEFT_BUTTON_DOWN] = false;
+                }
+                else if(event.button.button == SDL_BUTTON_RIGHT)
+                {
+                    keyPressed[MOUSE_RIGHT_BUTTON_DOWN] = false;
+                }
+                else if(event.button.button == SDL_BUTTON_MIDDLE)
+                {
+                    keyPressed[MOUSE_MIDDLE_BUTTON_DOWN] = false;
+                }
             }
         }
     // logic
@@ -179,8 +233,6 @@ void mainloop(SDL_Window *window)
         drawscene(window);
 
         handleKeyPresses();
-
-
 
         SDL_Delay(33);
     }

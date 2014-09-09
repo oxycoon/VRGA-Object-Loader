@@ -6,6 +6,7 @@ Camera::Camera()
 {
     position_ = glm::vec3(0.0f, 0.0f, -5.0f);
     matrix_ = glm::mat4();
+    rotation_ = glm::mat4();
     moveVector_ = glm::vec3();
     matrix_ = glm::translate(matrix_, position_);
     //    matrix_ = glm::rotate(matrix_, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -14,9 +15,10 @@ Camera::Camera()
 void Camera::update()
 {
     matrix_ = glm::translate(matrix_, moveVector_);
-    //matrix_ = glm::rotate(matrix_, 0.05f, glm::vec3(0.0f, 1.0f, 0.0f));
+    matrix_ *= rotation_;
     //zoomOut();
     moveVector_ = glm::vec3();
+    rotation_ = glm::mat4();
 }
 
 void Camera::moveRight()
@@ -62,6 +64,11 @@ void Camera::zoomOut()
         matrix_ = glm::translate(matrix_, temp);
     }
 
+}
+
+void Camera::rotateCamera(float angles, glm::vec3 rotationAxis)
+{
+    rotation_ = glm::rotate(rotation_, angles, rotationAxis);
 }
 void Camera::moveBackward()
 {
