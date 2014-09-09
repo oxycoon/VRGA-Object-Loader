@@ -80,10 +80,16 @@ void initScene()
     scene.addModelToScene("res/models/garg.obj");
 }
 
-void resizeWindow(SDL_Window *window, int w, int h)
+void resizeWindow(int w, int h)
 {
     std::cout << "Resizing window to " << w << "x" << h << std::endl;
-
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+    glMatrixMode(GL_PROJECTION);
+    glOrtho(0, w, 0, h, -1, 1);
+    scene.updateProjection(glm::perspective((float)M_PI_4, (float)w/h, 0.1f, 1024.0f));
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 void mainloop(SDL_Window *window)
@@ -101,16 +107,13 @@ void mainloop(SDL_Window *window)
                 case SDL_QUIT:
                     quit = true;
                     break;
-
-
-
             }
             if(event.type == SDL_WINDOWEVENT)
             {
                 switch(event.window.event)
                 {
                     case SDL_WINDOWEVENT_RESIZED:
-                        resizeWindow(window, event.window.data1, event.window.data2);
+                        resizeWindow(event.window.data1, event.window.data2);
                         break;
                 }
             }

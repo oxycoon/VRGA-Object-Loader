@@ -44,6 +44,8 @@ public:
     void removeSceneObject(const std::shared_ptr<Model> child);
     void toggleSceneObject(const std::shared_ptr<Model> child);
 
+    void updateProjection(glm::mat4 projection){projection_ = projection;}
+
 private:
     std::vector<std::shared_ptr<Model>> sceneObjects_;
     std::vector<std::shared_ptr<Model>> newChildren_;
