@@ -41,6 +41,8 @@ public:
     void moveCameraDown();
     void moveCameraLeft();
     void moveCameraRight();
+    void moveCameraZoomIn();
+    void moveCameraZoomOut();
 
 
 

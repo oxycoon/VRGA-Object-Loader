@@ -43,5 +43,7 @@ const int KEY_ID_0          = 37;
 const int MOUSE_LEFT_BUTTON_DOWN    = 60;
 const int MOUSE_RIGHT_BUTTON_DOWN   = 61;
 const int MOUSE_MIDDLE_BUTTON_DOWN  = 62;
+const int MOUSE_SCROLL_UP           = 63;
+const int MOUSE_SCROLL_DOWN         = 64;
 
 #endif // INPUT_H

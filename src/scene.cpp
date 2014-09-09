@@ -29,6 +29,16 @@ void Scene::moveCameraRight()
     camera_->moveRight();
 }
 
+void Scene::moveCameraZoomIn()
+{
+    camera_->zoomIn();
+}
+
+void Scene::moveCameraZoomOut()
+{
+    camera_->zoomOut();
+}
+
 void Scene::render()
 {
 

@@ -165,6 +165,13 @@ void mainloop(SDL_Window *window)
             {
                 keyUp(event);
             }
+            if(event.type == SDL_MOUSEWHEEL)
+            {
+                if(event.wheel.y > 0)
+                    scene.moveCameraZoomIn();
+                if(event.wheel.y < 0)
+                    scene.moveCameraZoomOut();
+            }
         }
     // logic
         scene.update();
