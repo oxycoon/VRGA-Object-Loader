@@ -66,29 +66,6 @@ void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
 
 void drawscene(SDL_Window *window)
 {
-//  glm::mat4 modelmatrix = glm::mat4();
-//  modelmatrix = glm::translate(modelmatrix, glm::vec3(0.f, 0.f, -5.0f));
-
-
-//  // multiply our modelmatrix and our projectionmatrix.
-//  // Results are stored in modelmatrix
-//  modelmatrix = projectionmatrix * modelmatrix;
-
-//  // Bind our modelmatrix variable to be a uniform called mvpmatrix
-//  // in our shaderprogram
-//  glUniformMatrix4fv(glGetUniformLocation(shaderprogram, "mvpmatrix"), 1,
-//                     GL_FALSE, glm::value_ptr(modelmatrix));
-
-//  glEnable(GL_CULL_FACE);
-//  glDepthFunc(GL_LESS);
-
-//  // Make our background black
-//  glClearColor(0.0, 0.0, 0.0, 1.0f);
-//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-  // Invoke glDrawArrays telling that our data consists of individual triangles
-  //glDrawArrays(GL_TRIANGLES, 0, mod.getVertics().size()-1);
   scene.render();
 
   // Swap our buffers to make our changes visible
@@ -97,105 +74,53 @@ void drawscene(SDL_Window *window)
 
 void initScene()
 {
-//  // An array of 12 Vertices to make 4 coloured triangles
-//  // in the shape of a tetrahedron
-//  const struct Vertex v[4]  = {
-//    {{ 1.0f,  1.0f,  1.0f }, { 0.0f, 1.0f, 1.0f }, {0.0f, 0.0f, 1.0f}},
-//    {{ -1.0f, -1.0f,  1.0f }, { 1.0f, 0.0f, 1.0f }, {0.0f, 0.0f, 1.0f}},
-//    {{ -1.0f,  1.0f, -1.0f }, { 1.0f, 1.0f, 0.0f }, {0.0f, 0.0f, 1.0f}},
-//    {{ 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f, 1.0f }, {0.0f, 0.0f, 1.0f}}
-//  };
-
-//  const struct Vertex tetrahedron[12] =
-//  {
-//    v[0], v[1], v[2],
-//    v[0], v[1], v[3],
-//    v[0], v[2], v[3],
-//    v[1], v[2], v[3]
-//  };
     glEnable(GL_DEPTH_TEST);
 
     scene.init();
     scene.addModelToScene("res/models/garg.obj");
-
-//    shader.initShader("res/shaders/phong");
-//    shader.enable();
-
-//    // These pointers will receive the contents of our shader source code files
-//    GLchar *vertexsource, *fragmentsource;
-
-//    // Read our shaders into the appropriate buffers
-//    vertexsource = filetobuf("res/shaders/phong.vert");
-//    fragmentsource = filetobuf("res/shaders/phong.frag");
-
-//    // Assign our handles a "name" to new shader objects
-//    vertexshader = glCreateShader(GL_VERTEX_SHADER);
-//    fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
-
-//    // Associate the source code buffers with each handle
-//    glShaderSource(vertexshader, 1, (const GLchar **)&vertexsource, 0);
-//    glShaderSource(fragmentshader, 1, (const GLchar **)&fragmentsource, 0);
-
-//    // Compile our shader objects
-//    glCompileShader(vertexshader);
-//    glCompileShader(fragmentshader);
-
-//    // Assign our program handle a "name"
-//    shaderprogram = glCreateProgram();
-
-//    // Attach our shaders to our program
-//    glAttachShader(shaderprogram, vertexshader);
-//    glAttachShader(shaderprogram, fragmentshader);
-
-//    // Bind attribute 0 to in_Position and attribute 1 (colors) to in_Color
-//    glBindAttribLocation(shaderprogram, 0, "in_Position");
-//    glBindAttribLocation(shaderprogram, 1, "in_Color");
-//    glBindAttribLocation(shaderprogram, 2, "in_Normal");
-
-//    // Link our program, and set it as being actively used
-//    glLinkProgram(shaderprogram);
-//    glUseProgram(shaderprogram);
-
-//    free(vertexsource);
-//    free(fragmentsource);
 }
 
 void resizeWindow(SDL_Window *window, int w, int h)
 {
+    std::cout << "Resizing window to " << w << "x" << h << std::endl;
 
 }
 
 void mainloop(SDL_Window *window)
 {
-  SDL_Event event;
+    SDL_Event event;
 
-  bool quit = false;
-  while ( quit == false )
-  {
-    // event handling
-    while ( SDL_PollEvent( &event ) )
+    bool quit = false;
+    while ( quit == false )
     {
-        switch ( event.type ) {
-            case SDL_QUIT:
-                quit = true;
-                break;
-//            case SDL_WINDOWEVENT_RESIZED:
-//                SDL_Log("Window %d resized to %d,%d",
-//                    event.window.windowID, event.window.data1,
-//                    event.window.data2);
-//                std::cout << "Window resized!" << std::endl;
-//                break;
-//            case SDL_WINDOWEVENT_MOVED:
-//                std::cout << "Window moved!" << std::endl;
-//                break;
-      }
-    }
+    // event handling
+        while ( SDL_PollEvent( &event ) )
+        {
+            switch ( event.type )
+            {
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+
+
+
+            }
+            if(event.type == SDL_WINDOWEVENT)
+            {
+                switch(event.window.event)
+                {
+                    case SDL_WINDOWEVENT_RESIZED:
+                        resizeWindow(window, event.window.data1, event.window.data2);
+                        break;
+                }
+            }
+        }
     // logic
-    scene.update();
-    // render
-    drawscene(window);
-    SDL_Delay(33);
-  }
+        scene.update();
+        // render
+        drawscene(window);
+        SDL_Delay(33);
+    }
 }
 
 void destroyScene()

@@ -11,7 +11,7 @@ Scene::Scene()
 
 void Scene::render()
 {
-    world_ = camera_->getMatrix();
+
     //world_ = glm::translate(world_, glm::vec3(0.f, 0.f, -5.0f));
     glm::mat4 projectionWorldMatrix = projection_ * world_;
     // Bind our modelmatrix variable to be a uniform called mvpmatrix
@@ -34,10 +34,10 @@ void Scene::render()
 
 void Scene::update()
 {
-    //camera_->moveUp();
-    //this->world_ = camera_->getMatrix();
+    camera_->update();
+    world_ = camera_->getMatrix();
 
-    //world_ = glm::rotate(world_, 2.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
 
 
 

@@ -25,12 +25,16 @@ public:
 
     glm::mat4 getMatrix(){return matrix_;}
 
+    void update();
+
     void moveRight();
     void moveLeft();
     void moveUp();
     void moveDown();
     void moveBackward();
     void moveForward();
+    void zoomIn();
+    void zoomOut();
 
 private:
     glm::mat4 matrix_;
