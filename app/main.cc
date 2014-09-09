@@ -23,6 +23,7 @@
 #include "model.h"
 #include "shader.h"
 #include "scene.h"
+#include "Input.h"
 
 #define PROGRAM_NAME "MeshLoader"
 
@@ -33,7 +34,13 @@ GLuint shaderprogram;
 // These are handles used to reference the shaders
 GLuint vertexshader, fragmentshader;
 
-//Shader shader;
+bool keyPressed[80];
+bool tapKey;
+int mousePosX, mousePosY;
+float moveX, moveY;
+
+bool quit;
+
 Scene scene;
 
 void setupwindow(SDL_Window  *&window, SDL_GLContext &context) {
@@ -92,11 +99,44 @@ void resizeWindow(int w, int h)
     glLoadIdentity();
 }
 
+//TODO optimalize
+void keyDown(SDL_Event event)
+{
+    std::cout << "Keydown event detected!" << std::endl;
+    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+    if(currentKeyStates [SDL_SCANCODE_Q] && !keyPressed[KEY_ID_Q]) keyPressed[KEY_ID_Q] = true;
+    if(currentKeyStates [SDL_SCANCODE_W] && !keyPressed[KEY_ID_W]) keyPressed[KEY_ID_W] = true;
+    if(currentKeyStates [SDL_SCANCODE_D] && !keyPressed[KEY_ID_D]) keyPressed[KEY_ID_D] = true;
+    if(currentKeyStates [SDL_SCANCODE_S] && !keyPressed[KEY_ID_S]) keyPressed[KEY_ID_S] = true;
+    if(currentKeyStates [SDL_SCANCODE_A] && !keyPressed[KEY_ID_A]) keyPressed[KEY_ID_A] = true;
+}
+
+//TODO optimalize
+void keyUp(SDL_Event event)
+{
+    std::cout << "Keyup event detected!" << std::endl;
+    const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+    if(!currentKeyStates [SDL_SCANCODE_Q] && keyPressed[KEY_ID_Q]) keyPressed[KEY_ID_Q] = false;
+    if(!currentKeyStates [SDL_SCANCODE_W] && keyPressed[KEY_ID_W]) keyPressed[KEY_ID_W] = false;
+    if(!currentKeyStates [SDL_SCANCODE_D] && keyPressed[KEY_ID_D]) keyPressed[KEY_ID_D] = false;
+    if(!currentKeyStates [SDL_SCANCODE_S] && keyPressed[KEY_ID_S]) keyPressed[KEY_ID_S] = false;
+    if(!currentKeyStates [SDL_SCANCODE_A] && keyPressed[KEY_ID_A]) keyPressed[KEY_ID_A] = false;
+}
+
+void handleKeyPresses()
+{
+    if(keyPressed[KEY_ID_Q]==true)      quit = true;
+    if(keyPressed[KEY_ID_W]==true)      scene.moveCameraUp();
+    if(keyPressed[KEY_ID_A]==true)      scene.moveCameraLeft();
+    if(keyPressed[KEY_ID_S]==true)      scene.moveCameraDown();
+    if(keyPressed[KEY_ID_D]==true)      scene.moveCameraRight();
+}
+
 void mainloop(SDL_Window *window)
 {
     SDL_Event event;
 
-    bool quit = false;
+    quit = false;
     while ( quit == false )
     {
     // event handling
@@ -117,11 +157,24 @@ void mainloop(SDL_Window *window)
                         break;
                 }
             }
+            if(event.type == SDL_KEYDOWN)
+            {
+                keyDown(event);
+            }
+            if(event.type == SDL_KEYUP)
+            {
+                keyUp(event);
+            }
         }
     // logic
         scene.update();
         // render
         drawscene(window);
+
+        handleKeyPresses();
+
+
+
         SDL_Delay(33);
     }
 }

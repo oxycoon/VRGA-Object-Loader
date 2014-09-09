@@ -40,6 +40,8 @@ private:
     glm::mat4 matrix_;
     glm::vec3 position_;
 
+    glm::vec3 moveVector_;
+
 };
 
 #endif // CAMERA_H

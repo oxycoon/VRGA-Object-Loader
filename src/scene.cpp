@@ -9,6 +9,26 @@ Scene::Scene()
     projection_ = glm::perspective((float)M_PI_4, 1.0f, 0.1f, 100.0f);
 }
 
+void Scene::moveCameraUp()
+{
+    camera_->moveUp();
+}
+
+void Scene::moveCameraDown()
+{
+    camera_->moveDown();
+}
+
+void Scene::moveCameraLeft()
+{
+    camera_->moveLeft();
+}
+
+void Scene::moveCameraRight()
+{
+    camera_->moveRight();
+}
+
 void Scene::render()
 {
 
@@ -113,3 +133,5 @@ void Scene::toggleSceneObject(const std::shared_ptr<Model> child)
         break;
     }
 }
+
+

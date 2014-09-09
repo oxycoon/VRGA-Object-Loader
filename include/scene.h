@@ -35,6 +35,15 @@ public:
 
     glm::mat4 getWorld(){return world_;}
 
+    std::shared_ptr<Camera>getCamera(){return camera_;}
+
+    void moveCameraUp();
+    void moveCameraDown();
+    void moveCameraLeft();
+    void moveCameraRight();
+
+
+
     void render();
     void update();
     void init();
