@@ -44,6 +44,7 @@ public:
     void moveCameraZoomIn();
     void moveCameraZoomOut();
     void moveCameraRotate(float angles, glm::vec3 rotationAxis);
+//    void moveCameraRotate(float pitch, float yaw);
 
     void shaderCycle();
 

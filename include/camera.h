@@ -23,10 +23,10 @@ class Camera
 public:
     Camera();
 
-    glm::mat4 getMatrix(){return matrix_;}
+    glm::mat4 getMatrix();
 
-    void setLookAt(glm::vec3 newLookAt){lookAt_ = newLookAt;}
-    void setPosition(glm::vec3 newPos){position_ = newPos;}
+    void setLookAt(glm::vec3 newLookAt);
+    void setPosition(glm::vec3 newPos);
 
     void update();
 
@@ -39,6 +39,7 @@ public:
     void zoomIn();
     void zoomOut();
     void rotateCamera(float angles, glm::vec3 rotationAxis);
+    //void rotateCamera(float pitch, float yaw);
 
 private:
     glm::mat4 matrix_;
@@ -48,6 +49,10 @@ private:
     glm::vec3 moveVector_;
     glm::vec3 upVector_;
     glm::vec3 lookAt_;
+
+//    float yaw_ = 0.0f;
+//    float pitch_ = 0.0f;
+//    float zoom_ = 1.0f;
 };
 
 #endif // CAMERA_H

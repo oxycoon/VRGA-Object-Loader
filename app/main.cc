@@ -138,21 +138,10 @@ void handleKeyPresses()
 
     if(keyPressed[MOUSE_LEFT_BUTTON_DOWN])
     {
-//        glm::vec2 angle(mousePosX, mousePosY);
-//        glm::vec2 speed(moveX, moveY);
-
-//        float angleLength = glm::length(angle);
-//        angleLength *= glm::length(speed) * 0.0001;
-
-//        glm::vec3 rotation(mousePosY, mousePosX,0.0f );
-//        rotation = glm::normalize(rotation);
-//        scene.moveCameraRotate(angleLength, glm::normalize(rotation));
-//        glm::vec2 moveVector(moveX, moveY);
-
-//        float xAngle, yAngle;
         float xAngle = moveX / (2*M_PI) * 0.1;
         float yAngle = moveY / (2*M_PI) * 0.1;
 
+//        scene.moveCameraRotate(xAngle, yAngle);
         scene.moveCameraRotate(xAngle, glm::vec3(0.0f, 1.0f, 0.0f)); //yaw
         scene.moveCameraRotate(yAngle, glm::vec3(1.0f, 0.0f, 0.0f)); //roll
     }
