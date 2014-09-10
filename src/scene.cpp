@@ -78,7 +78,7 @@ void Scene::render()
 
     //uniform for the light's direction
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "lightDirection"), 1,
-               glm::value_ptr(glm::vec3(lightPosition)));
+               glm::value_ptr(glm::vec3(lightDirection)));
 
 
 
