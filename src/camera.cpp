@@ -1,6 +1,7 @@
 #include "camera.h"
 
 #include <iostream>
+#include <GL/glu.h>
 
 Camera::Camera()
 {
@@ -8,17 +9,31 @@ Camera::Camera()
     matrix_ = glm::mat4();
     rotation_ = glm::mat4();
     moveVector_ = glm::vec3();
+    upVector_ = glm::vec3(0.0f, 1.0f, 0.0f);
     matrix_ = glm::translate(matrix_, position_);
     //    matrix_ = glm::rotate(matrix_, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void Camera::update()
 {
+//    glm::vec3 centerTarget = position_ - lookAt_;
+//    glm::vec3 normalizedCenterTarget = glm::normalize(centerTarget);
+//    glm::vec3 normalizedUp = glm::normalize(upVector_);
+
+//    glm::vec3 s = glm::cross(normalizedCenterTarget, normalizedUp);
+//    glm::vec3 normalizedS = glm::normalize(s);
+//    glm::vec3 u = glm::cross(normalizedS, normalizedCenterTarget);
+
+
+
     matrix_ = glm::translate(matrix_, moveVector_);
     matrix_ *= rotation_;
     //zoomOut();
+    position_ += moveVector_;
     moveVector_ = glm::vec3();
     rotation_ = glm::mat4();
+
+    //matrix_ *= glm::mat4(glm::vec4(s, 0.0f), glm::vec4(u, 0.0f), glm::vec4(-normalizedCenterTarget, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
 void Camera::moveRight()
@@ -48,8 +63,9 @@ void Camera::zoomIn()
     if(glm::length(temp) > 2)
     {
         temp = glm::normalize(temp);
-        position_ -= temp;
-        matrix_ = glm::translate(matrix_, -temp);
+        moveVector_ -= temp;
+        //position_ -= temp;
+        //matrix_ = glm::translate(matrix_, -temp);
     }
 
 }
@@ -60,8 +76,9 @@ void Camera::zoomOut()
     if(glm::length(temp) < 10)
     {
         temp = glm::normalize(temp);
-        position_ += temp;
-        matrix_ = glm::translate(matrix_, temp);
+        moveVector_ += temp;
+        //position_ += temp;
+        //matrix_ = glm::translate(matrix_, temp);
     }
 
 }

@@ -25,6 +25,9 @@ public:
 
     glm::mat4 getMatrix(){return matrix_;}
 
+    void setLookAt(glm::vec3 newLookAt){lookAt_ = newLookAt;}
+    void setPosition(glm::vec3 newPos){position_ = newPos;}
+
     void update();
 
     void moveRight();
@@ -43,7 +46,8 @@ private:
     glm::vec3 position_;
 
     glm::vec3 moveVector_;
-
+    glm::vec3 upVector_;
+    glm::vec3 lookAt_;
 };
 
 #endif // CAMERA_H
