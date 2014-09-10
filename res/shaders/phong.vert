@@ -8,6 +8,7 @@ in vec3 in_Normal;
 
 // mvpmatrix is the result of multiplying the model, view, and projection matrices */
 uniform mat4 mvpmatrix;
+uniform vec3 lightDirection;
 
 out vec3 ex_Color;
 out vec3 ex_Normal;

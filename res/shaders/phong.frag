@@ -5,10 +5,12 @@ in vec3 ex_Normal;
 
 out vec4 gl_FragColor;
 
+uniform vec3 lightDirection;
+
 void main(void) {
 	//gl_FragColor = vec4(ex_Color,1.0);
 
-	vec3 lightVector = vec3(30.0, 10.0, 20.0);
+	vec3 lightVector = lightDirection;
 	vec3 diffuseMaterial = ex_Color;
 	vec3 specularMaterial = vec3(0.4, 0.4, 0.4);
 
