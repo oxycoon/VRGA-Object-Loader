@@ -3,10 +3,21 @@
 #include "camera.h"
 #include "model.h"
 
+
 Scene::Scene()
 {
     world_ = glm::mat4();
     projection_ = glm::perspective((float)M_PI_4, 1.0f, 0.1f, 100.0f);
+}
+
+glm::mat4 Scene::getWorld()
+{
+    return world_;
+}
+
+std::shared_ptr<Camera> Scene::getCamera()
+{
+    return camera_;
 }
 
 void Scene::moveCameraUp()
@@ -44,6 +55,11 @@ void Scene::moveCameraRotate(float angles, glm::vec3 rotationAxis)
     camera_->rotateCamera(angles, rotationAxis);
 }
 
+void Scene::shaderCycle()
+{
+    shaderManager_.cycleShader();
+}
+
 void Scene::render()
 {
 
@@ -51,7 +67,7 @@ void Scene::render()
     glm::mat4 projectionWorldMatrix = projection_ * world_;
     // Bind our modelmatrix variable to be a uniform called mvpmatrix
     // in our shaderprogram
-    glUniformMatrix4fv(glGetUniformLocation(shader_.getProg(), "mvpmatrix"), 1,
+    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "mvpmatrix"), 1,
                        GL_FALSE, glm::value_ptr(projectionWorldMatrix));
 
     glEnable(GL_CULL_FACE);
@@ -97,8 +113,11 @@ void Scene::init()
     // Initialize camera
     camera_.reset(new Camera());
     world_ = camera_->getMatrix();
-    shader_.initShader("res/shaders/phong");
-    shader_.enable();
+//    shader_.initShader("");
+//    shader_.enable();
+    shaderManager_.loadShader("res/shaders/phong");
+    shaderManager_.loadShader("res/shaders/simple");
+    shaderManager_.activeShader(0);
 }
 
 void Scene::addModelToScene(char *path)
@@ -147,6 +166,11 @@ void Scene::toggleSceneObject(const std::shared_ptr<Model> child)
     {
         break;
     }
+}
+
+void Scene::updateProjection(glm::mat4 projection)
+{
+    projection_ = projection;
 }
 
 

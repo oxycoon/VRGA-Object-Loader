@@ -113,6 +113,7 @@ void keyDown(SDL_Event event)
     if(currentKeyStates [SDL_SCANCODE_D] && !keyPressed[KEY_ID_D]) keyPressed[KEY_ID_D] = true;
     if(currentKeyStates [SDL_SCANCODE_S] && !keyPressed[KEY_ID_S]) keyPressed[KEY_ID_S] = true;
     if(currentKeyStates [SDL_SCANCODE_A] && !keyPressed[KEY_ID_A]) keyPressed[KEY_ID_A] = true;
+    if(currentKeyStates [SDL_SCANCODE_R]) scene.shaderCycle();
 }
 
 //TODO optimalize

@@ -23,7 +23,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "shader.h"
+#include "shadermanager.h"
 
 class Camera;
 class Model;
@@ -33,9 +33,9 @@ class Scene
 public:
     Scene();
 
-    glm::mat4 getWorld(){return world_;}
+    glm::mat4 getWorld();
 
-    std::shared_ptr<Camera>getCamera(){return camera_;}
+    std::shared_ptr<Camera>getCamera();
 
     void moveCameraUp();
     void moveCameraDown();
@@ -44,6 +44,8 @@ public:
     void moveCameraZoomIn();
     void moveCameraZoomOut();
     void moveCameraRotate(float angles, glm::vec3 rotationAxis);
+
+    void shaderCycle();
 
 
 
@@ -56,14 +58,14 @@ public:
     void removeSceneObject(const std::shared_ptr<Model> child);
     void toggleSceneObject(const std::shared_ptr<Model> child);
 
-    void updateProjection(glm::mat4 projection){projection_ = projection;}
+    void updateProjection(glm::mat4 projection);
 
 private:
     std::vector<std::shared_ptr<Model>> sceneObjects_;
     std::vector<std::shared_ptr<Model>> newChildren_;
     std::shared_ptr<Camera> camera_;
 
-    Shader shader_;
+    ShaderManager shaderManager_;
 
     glm::mat4 world_;
     glm::mat4 projection_;

@@ -2,6 +2,7 @@
 
 #include <fcntl.h>
 #include <iostream>
+#include <sstream>
 #include <memory>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,9 +42,22 @@ GLuint Shader::getProg()
     return prog_;
 }
 
+string Shader::getName()
+{
+    return name_;
+}
+
 bool Shader::initShader(char *path)
 {
     int vSize, fSize;
+
+    //get the name of the shader, needs to be optimalized
+    string temp;
+    std::istringstream s(path);
+    while(std::getline(s, temp, '/'))
+    {
+        name_ = temp;
+    }
 
     vSize = shaderSize(path, V_SHADER);
     fSize = shaderSize(path, F_SHADER);
@@ -215,7 +229,6 @@ int Shader::readShader(char *path, ShaderType st, char *shaderSource, int size)
             break;
     }
 
-
     // Open the file
     fh = fopen(name, "r");
     if (!fh)
@@ -231,7 +244,4 @@ int Shader::readShader(char *path, ShaderType st, char *shaderSource, int size)
 
     fclose(fh);
     return count;
-
-    return count;
-
 }
