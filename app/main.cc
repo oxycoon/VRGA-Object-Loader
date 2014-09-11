@@ -106,7 +106,7 @@ void resizeWindow(int w, int h)
 //TODO optimalize
 void keyDown(SDL_Event event)
 {
-    std::cout << "Keydown event detected!" << std::endl;
+    //std::cout << "Keydown event detected!" << std::endl;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
     if(currentKeyStates [SDL_SCANCODE_Q] && !keyPressed[KEY_ID_Q]) keyPressed[KEY_ID_Q] = true;
     if(currentKeyStates [SDL_SCANCODE_W] && !keyPressed[KEY_ID_W]) keyPressed[KEY_ID_W] = true;
@@ -119,7 +119,7 @@ void keyDown(SDL_Event event)
 //TODO optimalize
 void keyUp(SDL_Event event)
 {
-    std::cout << "Keyup event detected!" << std::endl;
+    //std::cout << "Keyup event detected!" << std::endl;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
     if(!currentKeyStates [SDL_SCANCODE_Q] && keyPressed[KEY_ID_Q]) keyPressed[KEY_ID_Q] = false;
     if(!currentKeyStates [SDL_SCANCODE_W] && keyPressed[KEY_ID_W]) keyPressed[KEY_ID_W] = false;
@@ -225,6 +225,11 @@ void mainloop(SDL_Window *window)
                     keyPressed[MOUSE_MIDDLE_BUTTON_DOWN] = false;
                 }
             }
+            else if(event.type == SDL_DROPFILE)
+            {
+                //std::cout << "DROP EVENT DETECTED!" << std::endl;
+                scene.addModelToScene(event.drop.file);
+            }
         }
     // logic
         scene.update();
@@ -273,7 +278,7 @@ int main(int argc, char *argv[]) {
   if(argc != 2)
   {
       std::cout << "No file argument, loading default model" << std::endl;
-      scene.addModelToScene("res/models/garg.obj");
+      //scene.addModelToScene("res/models/garg.obj");
   }
   else
   {

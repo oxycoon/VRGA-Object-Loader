@@ -77,8 +77,22 @@ void Scene::render()
                        GL_FALSE, glm::value_ptr(projectionWorldMatrix));
 
     //uniform for the light's direction
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "lightDirection"), 1,
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.position"), 1,
                glm::value_ptr(glm::vec3(lightDirection)));
+
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.ambient"), 1,
+               glm::value_ptr(glm::vec3(lightAmbient)));
+
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.diffuse"), 1,
+               glm::value_ptr(glm::vec3(lightDiffuse)));
+
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.specular"), 1,
+               glm::value_ptr(glm::vec3(lightSpecular)));
+
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotDirection"), 1,
+               glm::value_ptr(glm::vec3(lightDirection)));
+
+
 
 
 
@@ -130,6 +144,7 @@ void Scene::init()
     shaderManager_.loadShader("res/shaders/phong");
     shaderManager_.loadShader("res/shaders/simple");
     shaderManager_.loadShader("res/shaders/toon");
+    shaderManager_.loadShader("res/shaders/simplelight");
     shaderManager_.activeShader(0);
 }
 

@@ -35,41 +35,62 @@ void Camera::setPosition(glm::vec3 newPos)
 
 void Camera::update()
 {
-//    glm::vec3 centerTarget = position_ - lookAt_;
-//    glm::vec3 normalizedCenterTarget = glm::normalize(centerTarget);
-//    glm::vec3 normalizedUp = glm::normalize(upVector_);
+//    glLoadIdentity();
+//    gluLookAt(position_[0],position_[1],position_[2],
+//            lookAt_[0], lookAt_[1], lookAt_[2],
+//            upVector_[0], upVector_[1], upVector_[2]);
 
-//    glm::vec3 s = glm::cross(normalizedCenterTarget, normalizedUp);
-//    glm::vec3 normalizedS = glm::normalize(s);
-//    glm::vec3 u = glm::cross(normalizedS, normalizedCenterTarget);
+    position_ += moveVector_;
+//    glm::vec3 ct = position_ - lookAt_;
+//    glm::vec3 nct = glm::normalize(ct);
+//    glm::vec3 nu = glm::normalize(upVector_);
 
-
+//    glm::vec3 s = glm::cross(nct, nu);
+//    glm::vec3 ns = glm::normalize(s);
+//    glm::vec3 u = glm::cross(ns, nct);
 
     matrix_ = glm::translate(matrix_, moveVector_);
     matrix_ *= rotation_;
 
-    std::cout << "---------------------------" << std::endl;
-    std::cout << matrix_[0][0] << "," << matrix_[0][1] << "," << matrix_[0][2] << "," << matrix_[0][3] << std::endl;
-    std::cout << matrix_[1][0] << "," << matrix_[1][1] << "," << matrix_[1][2] << "," << matrix_[1][3] << std::endl;
-    std::cout << matrix_[2][0] << "," << matrix_[2][1] << "," << matrix_[2][2] << "," << matrix_[2][3] << std::endl;
-    std::cout << matrix_[3][0] << "," << matrix_[3][1] << "," << matrix_[3][2] << "," << matrix_[3][3] << std::endl;
 
 
-    //zoomOut();
-    position_ += moveVector_;
+//    std::cout << "---------------------------" << std::endl;
+//    std::cout << matrix_[0][0] << "," << matrix_[0][1] << "," << matrix_[0][2] << "," << matrix_[0][3] << std::endl;
+//    std::cout << matrix_[1][0] << "," << matrix_[1][1] << "," << matrix_[1][2] << "," << matrix_[1][3] << std::endl;
+//    std::cout << matrix_[2][0] << "," << matrix_[2][1] << "," << matrix_[2][2] << "," << matrix_[2][3] << std::endl;
+//    std::cout << matrix_[3][0] << "," << matrix_[3][1] << "," << matrix_[3][2] << "," << matrix_[3][3] << std::endl;
+//    std::cout << position_[0] << "," << position_[1] << "," << position_[2] << std::endl;
+
+//    //zoomOut();
+
+
+
+//    matrix_ *= glm::mat4(glm::vec4(s, 0.0f), glm::vec4(u, 0.0f), glm::vec4(-nct, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+//    matrix_ *= rotation_;
+//    matrix_ = glm::translate(matrix_, -moveVector_);
+
+
     moveVector_ = glm::vec3();
     rotation_ = glm::mat4();
-
-    //matrix_ *= glm::mat4(glm::vec4(s, 0.0f), glm::vec4(u, 0.0f), glm::vec4(-normalizedCenterTarget, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
 void Camera::moveRight()
 {
-    moveVector_ += glm::vec3(-0.10f, 0.0f, 0.0f);
+    //moveVector_ += glm::vec3(-0.10f, 0.0f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, upVector_);
+    temp  = glm::normalize(temp);
+    temp *= -0.1f;
+
+    moveVector_ += temp;
 }
 void Camera::moveLeft()
 {
-    moveVector_ += glm::vec3(0.10f, 0.0f, 0.0f);
+    //moveVector_ += glm::vec3(0.10f, 0.0f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, upVector_);
+    temp  = glm::normalize(temp);
+    temp *= -0.1f;
+
+    moveVector_ -= temp;
 }
 void Camera::moveUp()
 {
@@ -86,10 +107,13 @@ void Camera::moveForward()
 
 void Camera::zoomIn()
 {
+    //glm::vec3 temp(matrix_[3][0], matrix_[3][1],matrix_[3][2]);
     glm::vec3 temp(position_);
     if(glm::length(temp) > 2)
     {
         temp = glm::normalize(temp);
+        //std::cout << temp[0] << "," << temp[1] << "," << temp[2] << std::endl;
+
         moveVector_ -= temp;
         //position_ -= temp;
         //matrix_ = glm::translate(matrix_, -temp);
@@ -99,6 +123,7 @@ void Camera::zoomIn()
 
 void Camera::zoomOut()
 {
+    //glm::vec3 temp(matrix_[3][0], matrix_[3][1],matrix_[3][2]);
     glm::vec3 temp(position_);
     if(glm::length(temp) < 10)
     {

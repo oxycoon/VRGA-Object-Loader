@@ -27,6 +27,7 @@
 
 class Camera;
 class Model;
+class Light;
 
 class Scene
 {
@@ -64,6 +65,7 @@ public:
 private:
     std::vector<std::shared_ptr<Model>> sceneObjects_;
     std::vector<std::shared_ptr<Model>> newChildren_;
+    std::vector<std::shared_ptr<Light>> lights_;
     std::shared_ptr<Camera> camera_;
 
     ShaderManager shaderManager_;

@@ -101,6 +101,8 @@ bool Shader::initShader(char *path)
     glShaderSource(vs_, 1, &vertS, 0);
     glShaderSource(fs_, 1, &fragS, 0);
 
+    cout << "Compiling shader: " << name_ << endl;
+
     //Compile and log vertex shader
     glCompileShader(vs_);
     glGetShaderiv(vs_, GL_COMPILE_STATUS, &vertCompiled);
@@ -143,9 +145,6 @@ bool Shader::initShader(char *path)
     glAttachShader(prog_, vs_);
     glAttachShader(prog_, fs_);
 
-//      glBindAttribLocation(prog_, 0, "in_Position");
-//      glBindAttribLocation(prog_, 1, "in_Color");
-
     //Link program and print log
     glLinkProgram(prog_);
     glGetProgramiv(prog_, GL_LINK_STATUS, &linked);
@@ -166,9 +165,6 @@ bool Shader::initShader(char *path)
   glBindAttribLocation(prog_, 0, "in_Position");
   glBindAttribLocation(prog_, 1, "in_Color");
   glBindAttribLocation(prog_, 2, "in_Normal");
-
-//    cout << vsSource_ << endl;
-//    cout << fsSource_ << endl;
 
     if (!linked)
         return false;
