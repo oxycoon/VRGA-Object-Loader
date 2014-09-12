@@ -25,6 +25,7 @@ public:
 
     glm::mat4 getMatrix();
     glm::mat4 getViewMatrix();
+    glm::vec3 getPosition();
 
     void setLookAt(glm::vec3 newLookAt);
     void setPosition(glm::vec3 newPos);

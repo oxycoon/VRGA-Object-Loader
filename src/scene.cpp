@@ -109,6 +109,9 @@ void Scene::render()
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotDirection"), 1,
                glm::value_ptr(glm::vec3(lightDirection)));
 
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.halfVector"), 1,
+               glm::value_ptr(glm::vec3(camera_->getPosition() - lightDirection)));
+
     //uniforms for material
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.emission"), 1,
                glm::value_ptr(glm::vec3(materialEmission)));
@@ -172,8 +175,9 @@ void Scene::init()
     shaderManager_.loadShader("res/shaders/phong");
     shaderManager_.loadShader("res/shaders/simple");
     shaderManager_.loadShader("res/shaders/toon");
-    shaderManager_.loadShader("res/shaders/simplelight");
-    shaderManager_.loadShader("res/shaders/simplespotlight");
+    shaderManager_.loadShader("res/shaders/simplevertexlight");
+    shaderManager_.loadShader("res/shaders/simplefragmentlight");
+    //shaderManager_.loadShader("res/shaders/pointlight");
     shaderManager_.activeShader(0);
 }
 

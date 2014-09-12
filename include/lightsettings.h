@@ -19,7 +19,7 @@ const static glm::vec3 materialEmission = glm::vec3(0.2f, 0.2f, 0.2f);
 const static glm::vec3 materialAmbient  = glm::vec3(0.3f, 0.3f, 0.3f);
 const static glm::vec3 materialDiffuse  = glm::vec3(0.7f, 0.7f, 0.2f);
 const static glm::vec3 materialSpecular = glm::vec3(0.6f, 0.6f, 0.6f);
-const static float materialShininess    = 8.0f;
+const static float materialShininess    = 32.0f;
 
 
 #endif // LIGHTSETTINGS_H

@@ -27,6 +27,11 @@ glm::mat4 Camera::getViewMatrix()
     return view_;
 }
 
+glm::vec3 Camera::getPosition()
+{
+    return position_;
+}
+
 void Camera::setLookAt(glm::vec3 newLookAt)
 {
     lookAt_ = newLookAt;
