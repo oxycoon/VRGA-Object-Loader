@@ -38,13 +38,12 @@ void Model::init()
 
     }
     initBuffer();
-
 }
 
 void Model::render()
 {
-//    if(!hide)
-//    {
+    if(!hide)
+    {
         glPushMatrix();
         glMultMatrixf(glm::value_ptr(matrix_));
 
@@ -64,12 +63,11 @@ void Model::render()
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);
         glPopMatrix();
-    //}
+    }
 }
 
 void Model::update()
 {
-
 
 }
 
@@ -104,6 +102,7 @@ bool Model::loadModel()
         {
             glm::vec3 vertex;
             fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
+            //printf("Vertex: %f,%f,%f\n", vertex.x, vertex.y, vertex.z);
             vert.push_back(vertex);
         }
         else if ( strcmp( lineHeader, "vt" ) == 0 )
@@ -116,10 +115,10 @@ bool Model::loadModel()
         {
             glm::vec3 normal;
             fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z );
+            //printf("Normal: %f,%f,%f\n", normal.x, normal.y, normal.z);
             norm.push_back(normal);
         }else if ( strcmp( lineHeader, "f" ) == 0 )
         {
-            std::string vertex1, vertex2, vertex3;
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
             int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
             if (matches != 9)
@@ -130,88 +129,15 @@ bool Model::loadModel()
             vertexIndex_.push_back(vertexIndex[0]);
             vertexIndex_.push_back(vertexIndex[1]);
             vertexIndex_.push_back(vertexIndex[2]);
-            uvIndex_    .push_back(uvIndex[0]);
-            uvIndex_    .push_back(uvIndex[1]);
-            uvIndex_    .push_back(uvIndex[2]);
+            uvIndex_.push_back(uvIndex[0]);
+            uvIndex_.push_back(uvIndex[1]);
+            uvIndex_.push_back(uvIndex[2]);
             normalIndex_.push_back(normalIndex[0]);
             normalIndex_.push_back(normalIndex[1]);
             normalIndex_.push_back(normalIndex[2]);
         }
 
     }
-
-//    std::ifstream file(path, std::ios::in);
-//    if(!file)
-//    {
-//        std::cerr << "Can't open " << path << std::endl;
-//        return false;
-//    }
-
-//    std::string line;
-//    while(std::getline(file, line))
-//    {
-//        if(line.substr(0,2) == "v ")
-//        {
-//            std::istringstream s(line.substr(2));
-//            GLfloat x, y, z; s >> x; s >> y; s >> z;
-//            glm::vec3 temp(x,y,z);
-//            vert.push_back(temp);
-//        }
-//        else if(line.substr(0,2) == "f ")
-//        {
-//            std::string vertex1, vertex2, vertex3;
-//            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-//            int matches = std::fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-//            if (matches != 9){
-//                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
-//                return false;
-//            }
-//            vertexIndex_.push_back(vertexIndex[0]);
-//            vertexIndex_.push_back(vertexIndex[1]);
-//            vertexIndex_.push_back(vertexIndex[2]);
-//            uvIndex_    .push_back(uvIndex[0]);
-//            uvIndex_    .push_back(uvIndex[1]);
-//            uvIndex_    .push_back(uvIndex[2]);
-//            normalIndex_.push_back(normalIndex[0]);
-//            normalIndex_.push_back(normalIndex[1]);
-//            normalIndex_.push_back(normalIndex[2]);
-
-//            std::stringstream ss(line.substr(2,line.length()));
-//            std::string temp;
-//            while(ss >> temp)
-//            {
-//                std::istringstream s(temp);
-//                std::string vertInd, uvInd, normInd;
-//                std::getline(s, vertInd, '/');
-//                std::getline(s, uvInd, '/');
-//                std::getline(s, normInd, ' ');
-
-//                if(uvInd == "")
-//                    uvIndex_.push_back(0);
-//                else
-//                    uvIndex_.push_back(std::stoi(uvInd)-1);
-//                if(normInd != "")
-//                    normalIndex_.push_back(std::stoi(normInd)-1);
-
-//                vertexIndex_.push_back(std::stoi(vertInd)-1);
-
-
-//            }
-//        }
-//        else if(line.substr(0,3) == "vn ")
-//        {
-//            std::istringstream s(line.substr(3));
-//            GLfloat x, y, z; s >> x; s >> y; s >> z;
-//            glm::vec3 temp(x,y,z);
-//            norm.push_back(temp);
-//        }
-//        else if(line.substr(0,3) == "vt ")
-//        {
-//            //TODO: Texture coordinates
-//        }
-//        else if(line[0] == '#'){}
-//        else {}
-//    }
 
     if(vertexIndex_.size() == normalIndex_.size())
     {
@@ -223,13 +149,34 @@ bool Model::loadModel()
 
             Vertex temp = {tempVert, glm::vec3(0.7f, 0.7f, 0.2f), tempNorm};
 
+//            printf("Vertex created: (%f,%f,%f), (%f,%f,%f), (%f,%f,%f)\n",
+//                   temp.position.x, temp.position.y, temp.position.z,
+//                   temp.color.x, temp.color.y, temp.color.z,
+//                   temp.normal.x, temp.normal.y, temp.normal.z);
+
             vertices_.push_back(temp);
         }
     }
+    //EXPERIMENTAL AND UNTESTED
     else
     {
-        std::cout << "Vertex index amount does not match normal index amount, implement manual calculation!" << std::endl;
-        return false;
+        for(int i = 0; i < vertexIndex_.size(); i+=3)
+        {
+            GLuint a = vertexIndex_[i-1];
+            GLuint b = vertexIndex_[i];
+            GLuint c = vertexIndex_[i+1];
+
+            glm::vec3 normal = glm::normalize(glm::cross(
+                    glm::vec3(vert[b]) - glm::vec3(vert[a]),
+                    glm::vec3(vert[c]) - glm::vec3(vert[a])));
+
+            Vertex temp1 = {vert[a], glm::vec3(0.7f, 0.7f, 0.2f), normal};
+            Vertex temp2 = {vert[b], glm::vec3(0.7f, 0.7f, 0.2f), normal};
+            Vertex temp3 = {vert[c], glm::vec3(0.7f, 0.7f, 0.2f), normal};
+            vertices_.push_back(temp1);
+            vertices_.push_back(temp2);
+            vertices_.push_back(temp3);
+        }
     }
 
     return true;

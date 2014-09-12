@@ -44,10 +44,10 @@ public:
     void moveCameraRight();
     void moveCameraZoomIn();
     void moveCameraZoomOut();
-    void moveCameraRotate(float angles, glm::vec3 rotationAxis);
-//    void moveCameraRotate(float pitch, float yaw);
+    void moveCameraRotate(glm::vec3 eulerAngles);
 
     void shaderCycle();
+    void modelCycle();
 
 
 
@@ -75,6 +75,7 @@ private:
     glm::mat4 view_;
 
     GLuint vao_, vbo_[0];
+    int modelIndex_ = 0;
 };
 
 #endif // SCENE_H

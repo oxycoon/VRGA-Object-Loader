@@ -2,6 +2,10 @@
 
 #include <iostream>
 #include <GL/glu.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera()
 {
@@ -10,14 +14,17 @@ Camera::Camera()
     rotation_ = glm::mat4();
     moveVector_ = glm::vec3();
     upVector_ = glm::vec3(0.0f, 1.0f, 0.0f);
-    lookAt_ = glm::vec3();
-    matrix_ = glm::translate(matrix_, position_);
-    //    matrix_ = glm::rotate(matrix_, 45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    lookAt_ = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 glm::mat4 Camera::getMatrix()
 {
     return matrix_;
+}
+
+glm::mat4 Camera::getViewMatrix()
+{
+    return view_;
 }
 
 void Camera::setLookAt(glm::vec3 newLookAt)
@@ -30,28 +37,27 @@ void Camera::setPosition(glm::vec3 newPos)
     glm::vec3 translate = position_ - newPos;
     matrix_ = glm::translate(matrix_, translate);
     position_ = newPos;
-    //position_ = newPos;
 }
+
+void Camera::setProjection(glm::mat4 projection)
+{
+    projection_ = projection;
+}
+
+void Camera::init()
+{
+    matrix_ = glm::translate(matrix_, position_);
+}
+
+
 
 void Camera::update()
 {
-//    glLoadIdentity();
-//    gluLookAt(position_[0],position_[1],position_[2],
-//            lookAt_[0], lookAt_[1], lookAt_[2],
-//            upVector_[0], upVector_[1], upVector_[2]);
-
     position_ += moveVector_;
-//    glm::vec3 ct = position_ - lookAt_;
-//    glm::vec3 nct = glm::normalize(ct);
-//    glm::vec3 nu = glm::normalize(upVector_);
 
-//    glm::vec3 s = glm::cross(nct, nu);
-//    glm::vec3 ns = glm::normalize(s);
-//    glm::vec3 u = glm::cross(ns, nct);
-
+    view_ = glm::lookAt(lookAt_, position_, upVector_);
     matrix_ = glm::translate(matrix_, moveVector_);
     matrix_ *= rotation_;
-
 
 
 //    std::cout << "---------------------------" << std::endl;
@@ -60,16 +66,6 @@ void Camera::update()
 //    std::cout << matrix_[2][0] << "," << matrix_[2][1] << "," << matrix_[2][2] << "," << matrix_[2][3] << std::endl;
 //    std::cout << matrix_[3][0] << "," << matrix_[3][1] << "," << matrix_[3][2] << "," << matrix_[3][3] << std::endl;
 //    std::cout << position_[0] << "," << position_[1] << "," << position_[2] << std::endl;
-
-//    //zoomOut();
-
-
-
-//    matrix_ *= glm::mat4(glm::vec4(s, 0.0f), glm::vec4(u, 0.0f), glm::vec4(-nct, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-//    matrix_ *= rotation_;
-//    matrix_ = glm::translate(matrix_, -moveVector_);
-
-
     moveVector_ = glm::vec3();
     rotation_ = glm::mat4();
 }
@@ -118,11 +114,19 @@ void Camera::zoomIn()
         //position_ -= temp;
         //matrix_ = glm::translate(matrix_, -temp);
     }
+//    if(zoom_ > 0.5)
+//    {
+//       zoom_ -= 0.02;
+//    }
     //moveVector_ += glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
 void Camera::zoomOut()
 {
+//    if(zoom_ < 1.5)
+//    {
+//       zoom_ += 0.02;
+//    }
     //glm::vec3 temp(matrix_[3][0], matrix_[3][1],matrix_[3][2]);
     glm::vec3 temp(position_);
     if(glm::length(temp) < 10)
@@ -135,15 +139,10 @@ void Camera::zoomOut()
     //moveVector_ -= glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
-//void Camera::rotateCamera(float pitch, float yaw)
-//{
-//    pitch_ += pitch;
-//    yaw_ += yaw;
-//}
-
-void Camera::rotateCamera(float angles, glm::vec3 rotationAxis)
+void Camera::rotateCamera(glm::vec3 eulerAngles)
 {
-    rotation_ = glm::rotate(rotation_, angles, rotationAxis);
+    quaterion_ = glm::quat(eulerAngles);
+    rotation_ = glm::toMat4(quaterion_);
 }
 
 void Camera::moveBackward()

@@ -24,10 +24,14 @@ public:
     Camera();
 
     glm::mat4 getMatrix();
+    glm::mat4 getViewMatrix();
 
     void setLookAt(glm::vec3 newLookAt);
     void setPosition(glm::vec3 newPos);
+    void setProjection(glm::mat4 projection);
 
+
+    void init();
     void update();
 
     void moveRight();
@@ -38,11 +42,12 @@ public:
     void moveForward();
     void zoomIn();
     void zoomOut();
-    void rotateCamera(float angles, glm::vec3 rotationAxis);
-    //void rotateCamera(float pitch, float yaw);
+    void rotateCamera(glm::vec3 eulerAngles);
 
 private:
     glm::mat4 matrix_;
+    glm::mat4 projection_;
+    glm::mat4 view_;
     glm::mat4 rotation_;
     glm::vec3 position_;
 
@@ -50,9 +55,8 @@ private:
     glm::vec3 upVector_;
     glm::vec3 lookAt_;
 
-//    float yaw_ = 0.0f;
-//    float pitch_ = 0.0f;
-//    float zoom_ = 1.0f;
+    glm::quat quaterion_;
+    float zoom_ = 1.0f;
 };
 
 #endif // CAMERA_H

@@ -113,6 +113,7 @@ void keyDown(SDL_Event event)
     if(currentKeyStates [SDL_SCANCODE_D] && !keyPressed[KEY_ID_D]) keyPressed[KEY_ID_D] = true;
     if(currentKeyStates [SDL_SCANCODE_S] && !keyPressed[KEY_ID_S]) keyPressed[KEY_ID_S] = true;
     if(currentKeyStates [SDL_SCANCODE_A] && !keyPressed[KEY_ID_A]) keyPressed[KEY_ID_A] = true;
+    if(currentKeyStates [SDL_SCANCODE_SPACE])  scene.modelCycle();
     if(currentKeyStates [SDL_SCANCODE_R]) scene.shaderCycle();
 }
 
@@ -138,12 +139,11 @@ void handleKeyPresses()
 
     if(keyPressed[MOUSE_LEFT_BUTTON_DOWN])
     {
-        float xAngle = moveX / (2*M_PI) * 0.1;
-        float yAngle = moveY / (2*M_PI) * 0.1;
+        float yAngle = moveX / (2*M_PI) * 0.1;
+        float xAngle = moveY / (2*M_PI) * 0.1;
 
-//        scene.moveCameraRotate(xAngle, yAngle);
-        scene.moveCameraRotate(xAngle, glm::vec3(0.0f, 1.0f, 0.0f)); //yaw
-        scene.moveCameraRotate(yAngle, glm::vec3(1.0f, 0.0f, 0.0f)); //roll
+        scene.moveCameraRotate(glm::vec3(xAngle, yAngle, 0.0f)); //yaw
+
     }
 }
 
@@ -278,7 +278,7 @@ int main(int argc, char *argv[]) {
   if(argc != 2)
   {
       std::cout << "No file argument, loading default model" << std::endl;
-      //scene.addModelToScene("res/models/garg.obj");
+      scene.addModelToScene("res/models/garg.obj");
   }
   else
   {

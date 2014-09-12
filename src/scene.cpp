@@ -51,14 +51,9 @@ void Scene::moveCameraZoomOut()
     camera_->zoomOut();
 }
 
-//void Scene::moveCameraRotate(float pitch, float yaw)
-//{
-//    camera_->rotateCamera(pitch, yaw);
-//}
-
-void Scene::moveCameraRotate(float angles, glm::vec3 rotationAxis)
+void Scene::moveCameraRotate(glm::vec3 eulerAngles)
 {
-    camera_->rotateCamera(angles, rotationAxis);
+    camera_->rotateCamera(eulerAngles);
 }
 
 void Scene::shaderCycle()
@@ -66,19 +61,41 @@ void Scene::shaderCycle()
     shaderManager_.cycleShader();
 }
 
+void Scene::modelCycle()
+{
+    if(sceneObjects_.size() > 0)
+    {
+        toggleSceneObject(sceneObjects_[modelIndex_]);
+
+        modelIndex_++;
+        if(modelIndex_ >= sceneObjects_.size())
+            modelIndex_ = 0;
+
+        toggleSceneObject(sceneObjects_[modelIndex_]);
+    }
+}
+
 void Scene::render()
 {
-
+    //glPushMatrix();
     //world_ = glm::translate(world_, glm::vec3(0.f, 0.f, -5.0f));
-    glm::mat4 projectionWorldMatrix = projection_ * world_;
+    glm::mat4 mvp = projection_ * camera_->getViewMatrix() * world_;
     // Bind our modelmatrix variable to be a uniform called mvpmatrix
     // in our shaderprogram
-    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "mvpmatrix"), 1,
-                       GL_FALSE, glm::value_ptr(projectionWorldMatrix));
+    //glMultMatrixf(glm::value_ptr(mvp));
 
-    //uniform for the light's direction
+    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "mvpmatrix"), 1,
+                       GL_FALSE, glm::value_ptr(mvp));
+
+    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "vmatrix"), 1,
+                       GL_FALSE, glm::value_ptr(camera_->getViewMatrix()));
+
+    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "mmatrix"), 1,
+                       GL_FALSE, glm::value_ptr(world_));
+
+    //uniform for the light
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.position"), 1,
-               glm::value_ptr(glm::vec3(lightDirection)));
+               glm::value_ptr(glm::vec3(lightPosition)));
 
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.ambient"), 1,
                glm::value_ptr(glm::vec3(lightAmbient)));
@@ -92,8 +109,20 @@ void Scene::render()
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotDirection"), 1,
                glm::value_ptr(glm::vec3(lightDirection)));
 
+    //uniforms for material
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.emission"), 1,
+               glm::value_ptr(glm::vec3(materialEmission)));
 
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.ambient"), 1,
+               glm::value_ptr(glm::vec3(materialAmbient)));
 
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.diffuse"), 1,
+               glm::value_ptr(glm::vec3(materialDiffuse)));
+
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.specular"), 1,
+               glm::value_ptr(glm::vec3(materialSpecular)));
+
+    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.shininess"), materialShininess);
 
 
     glEnable(GL_CULL_FACE);
@@ -107,16 +136,14 @@ void Scene::render()
     for(std::vector<std::shared_ptr<Model> >::iterator it = sceneObjects_.begin();
         it != sceneObjects_.end(); it++)
         (*it)->render();
+    //glPopMatrix();
 }
 
 void Scene::update()
 {
     camera_->update();
     world_ = camera_->getMatrix();
-
-
-
-
+    //world_ = glm::mat4();
 
     //Adds new scene objects to the scene.
     for(std::vector<std::shared_ptr<Model> >::iterator it = newChildren_.begin();
@@ -138,6 +165,7 @@ void Scene::init()
 
     // Initialize camera
     camera_.reset(new Camera());
+    camera_->init();
     world_ = camera_->getMatrix();
 //    shader_.initShader("");
 //    shader_.enable();
@@ -145,6 +173,7 @@ void Scene::init()
     shaderManager_.loadShader("res/shaders/simple");
     shaderManager_.loadShader("res/shaders/toon");
     shaderManager_.loadShader("res/shaders/simplelight");
+    shaderManager_.loadShader("res/shaders/simplespotlight");
     shaderManager_.activeShader(0);
 }
 

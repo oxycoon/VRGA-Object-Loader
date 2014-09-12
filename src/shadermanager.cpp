@@ -1,5 +1,6 @@
 #include "shadermanager.h"
 
+#include <iostream>
 
 ShaderManager::ShaderManager()
 {
@@ -17,6 +18,7 @@ void ShaderManager::cycleShader()
         index_ = 0;
     }
     shaderList_[index_].enable();
+    std::cout << "Active shader: " << shaderList_[index_].getName() << std::endl;
 }
 
 void ShaderManager::loadShader(char* path)
