@@ -62,7 +62,7 @@ void main(void) {
 	vec3 lightDirection = normalize(light1.position);
 	vec3 diffuse = material1.diffuse * light1.diffuse+0.0001*in_Color; // hack to make it work
 	vec3 ambient = material1.ambient * light1.ambient;
-	vec3 specular;
+	vec3 specular = vec3(0.0,0.0,0.0);
 
 	NdotL = max(dot(normalize(lightDirection), in_Normal), 0.0);
 
