@@ -32,27 +32,10 @@ in vec3 in_Color;
 in vec3 in_Normal;
 
 uniform mat4 mvpmatrix;
-uniform mat4 mmatrix;
-uniform mat4 vmatrix;
 uniform Light light1;
 uniform Material material1;
 
 out vec4 ex_Color;
-
-/*void main(void) {
-	vec3 norm = normalize(in_Normal);
-	vec3 lightDir = normalize(light1.position);
-	float NdotL;
-	
-	NdotL = dot(normalize(vec3(light1.position)), in_Normal);
-
-	vec4 diffuse = vec4(material1.diffuse * light1.diffuse, 1.0);
-	
-	ex_Color = NdotL * diffuse;
-	//ex_Color = vec4(norm, 1.0);
-	gl_Position = mvpmatrix * vec4(in_Position, 1.0);
-}*/
-
 
 void main(void) {
 // Multiply the mvp matrix by the vertex to obtain our final vertex position
@@ -66,7 +49,7 @@ void main(void) {
 
 	NdotL = max(dot(normalize(lightDirection), in_Normal), 0.0);
 
-	vec3 eyeVector = -in_Position;
+	vec3 eyeVector = light1.halfVector;
 
 	if(NdotL > 0.0)
 	{
@@ -76,8 +59,5 @@ void main(void) {
 	}
 
 	ex_Color = vec4(diffuse*NdotL, 1) + vec4(ambient,1) + vec4(specular,1);
-    	//ex_Color = vec4(in_Color*NdotL,1);
-	//ex_Color = vec4(vec3(0.7, 0.7, 0.2)*NdotL,1);
-	//ex_Normal = in_Normal;
 }
 
