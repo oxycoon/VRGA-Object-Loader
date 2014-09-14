@@ -115,6 +115,12 @@ void Scene::render()
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.eyePosition"), 1,
                glm::value_ptr(glm::vec3(camera_->getPosition())));
 
+    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotExponent"), lightSpotExponent);
+
+    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotCutoff"), lightCutoff);
+
+        glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotCosCutoff"), lightCosCutoff);
+
     glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.constantAttenuation"), lightAttConst);
 
     glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.linearAttenuation"), lightAttLin);
