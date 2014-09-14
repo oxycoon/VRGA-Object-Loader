@@ -8,6 +8,7 @@ struct Light
 	vec3 position;
 	vec3 halfVector;
 	vec3 spotDirection;
+	vec3 eyePosition;
 	float spotExponent;
 	float spotCutoff;
 	float spotCosCutoff;
@@ -15,6 +16,7 @@ struct Light
 	float linearAttenuation;
 	float quadraticAttenuation;
 };
+
 
 struct Material
 {
@@ -44,6 +46,7 @@ void main(void) {
 
 
 	vec3 halfVector = normalize(light1.halfVector);
+	//vec3 halfVector = normalize(normalize(light1.eyePosition) - lightVector);
 
 	vec3 diffuse = vec3(max(0.5*dot(normalVector, lightVector), 0.5)) * diffuseMaterial;
 

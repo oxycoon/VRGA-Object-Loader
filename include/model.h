@@ -35,7 +35,7 @@ public:
     void setPath(char* newPath){path = newPath;}
     void toggleHide();
 
-    void init();
+    bool init();
     void render();
     void update();
 

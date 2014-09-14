@@ -10,6 +10,7 @@ struct Light
 	vec3 position;
 	vec3 halfVector;
 	vec3 spotDirection;
+	vec3 eyePosition;
 	float spotExponent;
 	float spotCutoff;
 	float spotCosCutoff;
@@ -49,7 +50,7 @@ void main(void) {
 
 	NdotL = max(dot(normalize(lightDirection), in_Normal), 0.0);
 
-	vec3 eyeVector = light1.halfVector;
+	vec3 eyeVector = light1.eyePosition;
 
 	if(NdotL > 0.0)
 	{

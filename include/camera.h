@@ -54,6 +54,7 @@ private:
 
     glm::vec3 moveVector_;
     glm::vec3 upVector_;
+    glm::vec3 rightVector_;
     glm::vec3 lookAt_;
 
     glm::quat quaterion_;

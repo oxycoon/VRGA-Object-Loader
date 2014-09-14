@@ -108,7 +108,7 @@ void keyDown(SDL_Event event)
 {
     //std::cout << "Keydown event detected!" << std::endl;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-    if(currentKeyStates [SDL_SCANCODE_Q] && !keyPressed[KEY_ID_Q]) keyPressed[KEY_ID_Q] = true;
+    if(currentKeyStates [SDL_SCANCODE_Q]) quit = true;;
     if(currentKeyStates [SDL_SCANCODE_W] && !keyPressed[KEY_ID_W]) keyPressed[KEY_ID_W] = true;
     if(currentKeyStates [SDL_SCANCODE_D] && !keyPressed[KEY_ID_D]) keyPressed[KEY_ID_D] = true;
     if(currentKeyStates [SDL_SCANCODE_S] && !keyPressed[KEY_ID_S]) keyPressed[KEY_ID_S] = true;
@@ -131,7 +131,6 @@ void keyUp(SDL_Event event)
 
 void handleKeyPresses()
 {
-    if(keyPressed[KEY_ID_Q]==true)      quit = true;
     if(keyPressed[KEY_ID_W]==true)      scene.moveCameraUp();
     if(keyPressed[KEY_ID_A]==true)      scene.moveCameraLeft();
     if(keyPressed[KEY_ID_S]==true)      scene.moveCameraDown();

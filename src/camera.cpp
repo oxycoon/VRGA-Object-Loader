@@ -14,6 +14,7 @@ Camera::Camera()
     rotation_ = glm::mat4();
     moveVector_ = glm::vec3();
     upVector_ = glm::vec3(0.0f, 1.0f, 0.0f);
+    rightVector_ = glm::vec3(1.0f, 0.0f, 0.0f);
     lookAt_ = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
@@ -80,7 +81,7 @@ void Camera::moveRight()
     //moveVector_ += glm::vec3(-0.10f, 0.0f, 0.0f);
     glm::vec3 temp = glm::cross(position_, upVector_);
     temp  = glm::normalize(temp);
-    temp *= -0.1f;
+    temp *= -0.2f;
 
     moveVector_ += temp;
 }
@@ -89,17 +90,29 @@ void Camera::moveLeft()
     //moveVector_ += glm::vec3(0.10f, 0.0f, 0.0f);
     glm::vec3 temp = glm::cross(position_, upVector_);
     temp  = glm::normalize(temp);
-    temp *= -0.1f;
+    temp *= -0.2f;
 
     moveVector_ -= temp;
 }
 void Camera::moveUp()
 {
-    moveVector_ += glm::vec3(0.0f, -0.10f, 0.0f);
+//    moveVector_ += glm::vec3(0.0f, -0.10f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, rightVector_);
+    temp  = glm::normalize(temp);
+    temp *= -0.1f;
+
+    moveVector_ -= temp;
 }
 void Camera::moveDown()
 {
-    moveVector_ += glm::vec3(0.0f, 0.10f, 0.0f);
+//    moveVector_ += glm::vec3(0.0f, 0.10f, 0.0f);
+
+    //moveVector_ += glm::vec3(0.10f, 0.0f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, rightVector_);
+    temp  = glm::normalize(temp);
+    temp *= -0.1f;
+
+    moveVector_ += temp;
 }
 void Camera::moveForward()
 {

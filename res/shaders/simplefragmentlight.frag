@@ -9,6 +9,7 @@ struct Light
 	vec3 position;
 	vec3 halfVector;
 	vec3 spotDirection;
+	vec3 eyePosition;
 	float spotExponent;
 	float spotCutoff;
 	float spotCosCutoff;
@@ -36,7 +37,7 @@ uniform Material material1;
 out vec4 gl_FragColor;
 
 void main(void) {
-	vec3 n, lightDir;
+	vec3 n, lightDir, halfV;
 	float NdotL, NdotHV;
 	vec3 ambient, specular, diffuse;
 
@@ -46,6 +47,7 @@ void main(void) {
 	diffuse = light1.diffuse * material1.diffuse;
 	
 	vec4 color = vec4(ambient, 1.0) + 0.0001*ex_Color;//ex_color is a hack
+	halfV = normalize(light1.eyePosition) - normalize(light1.position);
 
 	n = normalize(ex_Normal);
 
@@ -54,8 +56,8 @@ void main(void) {
 	if(NdotL > 0.0)
 	{
 		color += vec4(diffuse * NdotL, 1.0);
-		NdotHV = max(dot(n,light1.halfVector),0.0);
-		color += vec4(specular,1.0) * pow(NdotHV, material1.shininess);		
+		NdotHV = max(dot(n,normalize(halfV)),0.0);
+		color += (vec4(specular,1.0) * pow(NdotHV, material1.shininess));		
 	}
 
 

@@ -112,6 +112,16 @@ void Scene::render()
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.halfVector"), 1,
                glm::value_ptr(glm::vec3(camera_->getPosition() - lightDirection)));
 
+    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.eyePosition"), 1,
+               glm::value_ptr(glm::vec3(camera_->getPosition())));
+
+    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.constantAttenuation"), lightAttConst);
+
+    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.linearAttenuation"), lightAttLin);
+
+    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.quadraticAttenuation"), lightAttQuad);
+
+
     //uniforms for material
     glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.emission"), 1,
                glm::value_ptr(glm::vec3(materialEmission)));
@@ -170,14 +180,13 @@ void Scene::init()
     camera_.reset(new Camera());
     camera_->init();
     world_ = camera_->getMatrix();
-//    shader_.initShader("");
-//    shader_.enable();
     shaderManager_.loadShader("res/shaders/phong");
     shaderManager_.loadShader("res/shaders/simple");
     shaderManager_.loadShader("res/shaders/toon");
     shaderManager_.loadShader("res/shaders/simplevertexlight");
     shaderManager_.loadShader("res/shaders/simplefragmentlight");
-    //shaderManager_.loadShader("res/shaders/pointlight");
+    shaderManager_.loadShader("res/shaders/pointlight");
+    shaderManager_.loadShader("res/shaders/spotlight");
     shaderManager_.activeShader(0);
 }
 
@@ -185,8 +194,10 @@ void Scene::addModelToScene(char *path)
 {
     std::shared_ptr<Model> mod;
     mod.reset(new Model(path));
-    mod->init();
-    addSceneObject(mod);
+    if(mod->init())
+        addSceneObject(mod);
+    else
+        std::cout << "File not added to scene" <<std::endl;
 }
 
 /**

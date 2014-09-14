@@ -30,14 +30,16 @@ void Model::toggleHide()
     hide ? hide = false : hide = true;
 }
 
-void Model::init()
+bool Model::init()
 {
     //If there's no model to load or load fails, model becomes box
     if(!loadModel())
     {
-
+        return false;
     }
     initBuffer();
+
+    return true;
 }
 
 void Model::render()

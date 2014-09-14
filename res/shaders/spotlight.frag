@@ -38,13 +38,31 @@ uniform Material material1;
 out vec4 gl_FragColor;
 
 void main(void) {
-	vec3 n, halfV, viewV, lightDir;
-	float NdotL, NdotHV;
+	vec3 n, halfV, viewV, lightDir, spotDir;
+	float NdotL, NdotSL, NdotHV;
 	vec3 ambient, specular, diffuse;
-	float att, lightDist;
+	float att, lightDist, spotEffect;
+
+	Light spotlight = Light(
+		vec3(0.2, 0.6, 0.3),
+		vec3(0.7, 0.2, 0.6),
+		vec3(0.4, 0.4, 0.4),
+		vec3(10.0, 10.0, 10.0),
+		normalize(normalize(light1.eyePosition) - normalize(vec3(10.0, 10.0, 10.0))),
+		vec3(-10.0, -10.0, -10.0),
+		light1.eyePosition,
+		0.15,
+		0.40,
+		0.50,
+		light1.constantAttenuation,
+		light1.linearAttenuation,
+		light1.quadraticAttenuation);
 
 	lightDir = vec3(light1.position - vec3(ex_ecPos));
 	lightDist = length(light1.position);
+
+	spotDir = vec3(spotlight.position - vec3(ex_ecPos));
+
 	ambient = light1.ambient * material1.ambient;
 	specular = light1.specular * material1.specular;
 	diffuse = light1.diffuse * material1.diffuse;
@@ -55,8 +73,25 @@ void main(void) {
 	halfV = normalize(light1.eyePosition) - normalize(light1.position);
 
 	NdotL = max(dot(n,normalize(lightDir)),0.0);
+	NdotSL = max(dot(n,normalize(spotDir)), 0.0);
 
-	if(NdotL > 0.0)
+	if(NdotSL > 0.0)
+	{
+		spotEffect = dot(normalize(spotlight.spotDirection), 
+				normalize(-spotDir));
+		if(spotEffect > spotlight.spotCosCutoff)
+		{
+			spotEffect = pow(spotEffect, spotlight.spotExponent);
+			att = spotEffect / (spotlight.constantAttenuation + spotlight.linearAttenuation * lightDist +
+				spotlight.quadraticAttenuation * lightDist * lightDist);
+			color += att * vec4(diffuse * NdotSL + ambient, 1.0);
+
+			NdotHV = max(dot(n,halfV),0.0);
+			color += att * vec4(specular * pow(NdotHV, material1.shininess), 1.0);
+		}
+	}
+
+	/*if(NdotL > 0.0)
 	{
 		att = 1 / (light1.constantAttenuation + light1.linearAttenuation * lightDist +
 				light1.quadraticAttenuation * lightDist * lightDist);
@@ -64,7 +99,7 @@ void main(void) {
 
 		NdotHV = max(dot(n,halfV),0.0);
 		color += att * vec4(specular,1.0) * pow(NdotHV, material1.shininess);		
-	}
+	}*/
 
 
 	gl_FragColor = color;

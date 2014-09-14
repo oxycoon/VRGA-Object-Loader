@@ -43,8 +43,8 @@ void main(void) {
 // Multiply the mvp matrix by the vertex to obtain our final vertex position
     	gl_Position = mvpmatrix * vec4(in_Position, 1.0);
     
-	//ex_Color = material1.diffuse * light1.diffuse;
-    	ex_Color = in_Color;
+	ex_Color = material1.diffuse * light1.diffuse + 0.005 * in_Color;
+    	//ex_Color = in_Color;
 	ex_Normal = in_Normal;
 	ex_intensity = dot(normalize(vec3(light1.position)), in_Normal);
 }
