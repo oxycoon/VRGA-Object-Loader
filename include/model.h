@@ -46,9 +46,9 @@ protected:
 
 private:
     std::vector<Vertex> vertices_;
-    std::vector<GLuint> vertexIndex_;
-    std::vector<GLuint> uvIndex_;
-    std::vector<GLuint> normalIndex_;
+    std::vector<GLuint> vertex_index_;
+    std::vector<GLuint> uv_index_;
+    std::vector<GLuint> normal_index_;
     GLuint id_, idVBO_, idIBO_, idNBO_;
 
     //Scene* scene_;

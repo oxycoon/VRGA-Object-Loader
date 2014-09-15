@@ -20,9 +20,9 @@ public:
     GLuint getActiveProg();
 
 private:
-    std::vector<Shader> shaderList_;
+    std::vector<Shader> shader_list_;
     int index_;
-    bool shaderActive_;
+    bool shader_active_;
 };
 
 #endif // SHADERMANAGER_H

@@ -63,12 +63,12 @@ public:
     void updateProjection(glm::mat4 projection);
 
 private:
-    std::vector<std::shared_ptr<Model>> sceneObjects_;
-    std::vector<std::shared_ptr<Model>> newChildren_;
+    std::vector<std::shared_ptr<Model>> scene_objects_;
+    std::vector<std::shared_ptr<Model>> new_children_;
     std::vector<std::shared_ptr<Light>> lights_;
     std::shared_ptr<Camera> camera_;
 
-    ShaderManager shaderManager_;
+    ShaderManager shader_manager_;
 
     glm::mat4 world_;
     glm::mat4 projection_;

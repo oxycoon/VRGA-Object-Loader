@@ -6,45 +6,45 @@ ShaderManager::ShaderManager()
 {
     //index_ = 0;
 
-    shaderActive_ = false;
+    shader_active_ = false;
 }
 
 void ShaderManager::cycleShader()
 {
-    shaderList_[index_].disable();
+    shader_list_[index_].disable();
     index_++;
-    if(index_ >= shaderList_.size())
+    if(index_ >= shader_list_.size())
     {
         index_ = 0;
     }
-    shaderList_[index_].enable();
-    std::cout << "Active shader: " << shaderList_[index_].getName() << std::endl;
+    shader_list_[index_].enable();
+    std::cout << "Active shader: " << shader_list_[index_].getName() << std::endl;
 }
 
 void ShaderManager::loadShader(char* path)
 {
     Shader temp;
     temp.initShader(path);
-    shaderList_.push_back(temp);
+    shader_list_.push_back(temp);
 
-    if(!shaderActive_)
+    if(!shader_active_)
     {
         temp.enable();
-        shaderActive_ = true;
+        shader_active_ = true;
     }
 }
 
 void ShaderManager::activeShader(int index)
 {
-    if(!index >= shaderList_.size())
+    if(!index >= shader_list_.size())
     {
-        shaderList_[index_].disable();
-        shaderList_[index].enable();
+        shader_list_[index_].disable();
+        shader_list_[index].enable();
         index_ = index;
     }
 }
 
 GLuint ShaderManager::getActiveProg()
 {
-    return shaderList_[index_].getProg();
+    return shader_list_[index_].getProg();
 }

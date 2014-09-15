@@ -52,10 +52,10 @@ private:
     glm::mat4 rotation_;
     glm::vec3 position_;
 
-    glm::vec3 moveVector_;
-    glm::vec3 upVector_;
-    glm::vec3 rightVector_;
-    glm::vec3 lookAt_;
+    glm::vec3 move_vector_;
+    glm::vec3 up_vector_;
+    glm::vec3 right_vector_;
+    glm::vec3 look_at_;
 
     glm::quat quaterion_;
     float zoom_ = 1.0f;

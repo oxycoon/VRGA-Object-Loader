@@ -28,7 +28,7 @@ public:
 
 private:
     GLuint vs_, fs_, prog_;
-    GLchar *vsSource_, *fsSource_;
+    GLchar *vs_source_, *fs_source_;
     std::string name_;
 
     int shaderSize(char *path, ShaderType st);

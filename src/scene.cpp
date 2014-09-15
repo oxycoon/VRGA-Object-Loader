@@ -58,20 +58,20 @@ void Scene::moveCameraRotate(glm::vec3 eulerAngles)
 
 void Scene::shaderCycle()
 {
-    shaderManager_.cycleShader();
+    shader_manager_.cycleShader();
 }
 
 void Scene::modelCycle()
 {
-    if(sceneObjects_.size() > 0)
+    if(scene_objects_.size() > 0)
     {
-        toggleSceneObject(sceneObjects_[modelIndex_]);
+        toggleSceneObject(scene_objects_[modelIndex_]);
 
         modelIndex_++;
-        if(modelIndex_ >= sceneObjects_.size())
+        if(modelIndex_ >= scene_objects_.size())
             modelIndex_ = 0;
 
-        toggleSceneObject(sceneObjects_[modelIndex_]);
+        toggleSceneObject(scene_objects_[modelIndex_]);
     }
 }
 
@@ -84,64 +84,64 @@ void Scene::render()
     // in our shaderprogram
     //glMultMatrixf(glm::value_ptr(mvp));
 
-    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "mvpmatrix"), 1,
+    glUniformMatrix4fv(glGetUniformLocation(shader_manager_.getActiveProg(), "mvpmatrix"), 1,
                        GL_FALSE, glm::value_ptr(mvp));
 
-    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "vmatrix"), 1,
+    glUniformMatrix4fv(glGetUniformLocation(shader_manager_.getActiveProg(), "vmatrix"), 1,
                        GL_FALSE, glm::value_ptr(camera_->getViewMatrix()));
 
-    glUniformMatrix4fv(glGetUniformLocation(shaderManager_.getActiveProg(), "mmatrix"), 1,
+    glUniformMatrix4fv(glGetUniformLocation(shader_manager_.getActiveProg(), "mmatrix"), 1,
                        GL_FALSE, glm::value_ptr(world_));
 
     //uniform for the light
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.position"), 1,
-               glm::value_ptr(glm::vec3(lightPosition)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.position"), 1,
+               glm::value_ptr(glm::vec3(kLightPosition)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.ambient"), 1,
-               glm::value_ptr(glm::vec3(lightAmbient)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.ambient"), 1,
+               glm::value_ptr(glm::vec3(kLightAmbient)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.diffuse"), 1,
-               glm::value_ptr(glm::vec3(lightDiffuse)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.diffuse"), 1,
+               glm::value_ptr(glm::vec3(kLightDiffuse)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.specular"), 1,
-               glm::value_ptr(glm::vec3(lightSpecular)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.specular"), 1,
+               glm::value_ptr(glm::vec3(kLightSpecular)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotDirection"), 1,
-               glm::value_ptr(glm::vec3(lightDirection)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.spotDirection"), 1,
+               glm::value_ptr(glm::vec3(kLightDirection)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.halfVector"), 1,
-               glm::value_ptr(glm::vec3(camera_->getPosition() - lightDirection)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.halfVector"), 1,
+               glm::value_ptr(glm::vec3(camera_->getPosition() - kLightDirection)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.eyePosition"), 1,
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.eyePosition"), 1,
                glm::value_ptr(glm::vec3(camera_->getPosition())));
 
-    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotExponent"), lightSpotExponent);
+    glUniform1f(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.spotExponent"), kLightSpotExponent);
 
-    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotCutoff"), lightCutoff);
+    glUniform1f(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.spotCutoff"), kLightCutoff);
 
-        glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.spotCosCutoff"), lightCosCutoff);
+        glUniform1f(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.spotCosCutoff"), kLightCosCutoff);
 
-    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.constantAttenuation"), lightAttConst);
+    glUniform1f(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.constantAttenuation"), kLightAttConst);
 
-    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.linearAttenuation"), lightAttLin);
+    glUniform1f(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.linearAttenuation"), kLightAttLin);
 
-    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "light1.quadraticAttenuation"), lightAttQuad);
+    glUniform1f(glGetUniformLocation(shader_manager_.getActiveProg(), "light1.quadraticAttenuation"), kLightAttQuad);
 
 
     //uniforms for material
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.emission"), 1,
-               glm::value_ptr(glm::vec3(materialEmission)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "material1.emission"), 1,
+               glm::value_ptr(glm::vec3(kMaterialEmission)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.ambient"), 1,
-               glm::value_ptr(glm::vec3(materialAmbient)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "material1.ambient"), 1,
+               glm::value_ptr(glm::vec3(kMaterialAmbient)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.diffuse"), 1,
-               glm::value_ptr(glm::vec3(materialDiffuse)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "material1.diffuse"), 1,
+               glm::value_ptr(glm::vec3(kMaterialDiffuse)));
 
-    glUniform3fv(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.specular"), 1,
-               glm::value_ptr(glm::vec3(materialSpecular)));
+    glUniform3fv(glGetUniformLocation(shader_manager_.getActiveProg(), "material1.specular"), 1,
+               glm::value_ptr(glm::vec3(kMaterialSpecular)));
 
-    glUniform1f(glGetUniformLocation(shaderManager_.getActiveProg(), "material1.shininess"), materialShininess);
+    glUniform1f(glGetUniformLocation(shader_manager_.getActiveProg(), "material1.shininess"), kMaterialShininess);
 
 
     glEnable(GL_CULL_FACE);
@@ -152,8 +152,8 @@ void Scene::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-    for(std::vector<std::shared_ptr<Model> >::iterator it = sceneObjects_.begin();
-        it != sceneObjects_.end(); it++)
+    for(std::vector<std::shared_ptr<Model> >::iterator it = scene_objects_.begin();
+        it != scene_objects_.end(); it++)
         (*it)->render();
     //glPopMatrix();
 }
@@ -165,11 +165,11 @@ void Scene::update()
     //world_ = glm::mat4();
 
     //Adds new scene objects to the scene.
-    for(std::vector<std::shared_ptr<Model> >::iterator it = newChildren_.begin();
-        it != newChildren_.end(); )
+    for(std::vector<std::shared_ptr<Model> >::iterator it = new_children_.begin();
+        it != new_children_.end(); )
     {
-        sceneObjects_.push_back((*it));
-        it = newChildren_.erase(it);
+        scene_objects_.push_back((*it));
+        it = new_children_.erase(it);
     }
 }
 
@@ -186,14 +186,14 @@ void Scene::init()
     camera_.reset(new Camera());
     camera_->init();
     world_ = camera_->getMatrix();
-    shaderManager_.loadShader("res/shaders/phong");
-    shaderManager_.loadShader("res/shaders/simple");
-    shaderManager_.loadShader("res/shaders/toon");
-    shaderManager_.loadShader("res/shaders/simplevertexlight");
-    shaderManager_.loadShader("res/shaders/simplefragmentlight");
-    shaderManager_.loadShader("res/shaders/pointlight");
-    shaderManager_.loadShader("res/shaders/spotlight");
-    shaderManager_.activeShader(0);
+    shader_manager_.loadShader("res/shaders/phong");
+    shader_manager_.loadShader("res/shaders/simple");
+    shader_manager_.loadShader("res/shaders/toon");
+    shader_manager_.loadShader("res/shaders/simplevertexlight");
+    shader_manager_.loadShader("res/shaders/simplefragmentlight");
+    shader_manager_.loadShader("res/shaders/pointlight");
+    shader_manager_.loadShader("res/shaders/spotlight");
+    shader_manager_.activeShader(0);
 }
 
 void Scene::addModelToScene(char *path)
@@ -216,7 +216,7 @@ void Scene::addModelToScene(char *path)
  */
 void Scene::addSceneObject(std::shared_ptr<Model> newChild)
 {
-    newChildren_.push_back(newChild);
+    new_children_.push_back(newChild);
 }
 
 /**
@@ -227,19 +227,19 @@ void Scene::addSceneObject(std::shared_ptr<Model> newChild)
  */
 void Scene::removeSceneObject(const std::shared_ptr<Model> child)
 {
-    for(std::vector<std::shared_ptr<Model> >::iterator it = sceneObjects_.begin();
-        it != sceneObjects_.end(); it++)
+    for(std::vector<std::shared_ptr<Model> >::iterator it = scene_objects_.begin();
+        it != scene_objects_.end(); it++)
     if(*it == child)
     {
-        sceneObjects_.erase(it);
+        scene_objects_.erase(it);
         break;
     }
 }
 
 void Scene::toggleSceneObject(const std::shared_ptr<Model> child)
 {
-    for(std::vector<std::shared_ptr<Model> >::iterator it = sceneObjects_.begin();
-        it != sceneObjects_.end(); it++)
+    for(std::vector<std::shared_ptr<Model> >::iterator it = scene_objects_.begin();
+        it != scene_objects_.end(); it++)
     if(*it == child)
     {
         break;

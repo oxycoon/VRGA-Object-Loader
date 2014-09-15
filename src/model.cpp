@@ -128,26 +128,26 @@ bool Model::loadModel()
                 printf("File can't be read by our simple parser : ( Try exporting with other options\n");
                 return false;
             }
-            vertexIndex_.push_back(vertexIndex[0]);
-            vertexIndex_.push_back(vertexIndex[1]);
-            vertexIndex_.push_back(vertexIndex[2]);
-            uvIndex_.push_back(uvIndex[0]);
-            uvIndex_.push_back(uvIndex[1]);
-            uvIndex_.push_back(uvIndex[2]);
-            normalIndex_.push_back(normalIndex[0]);
-            normalIndex_.push_back(normalIndex[1]);
-            normalIndex_.push_back(normalIndex[2]);
+            vertex_index_.push_back(vertexIndex[0]);
+            vertex_index_.push_back(vertexIndex[1]);
+            vertex_index_.push_back(vertexIndex[2]);
+            uv_index_.push_back(uvIndex[0]);
+            uv_index_.push_back(uvIndex[1]);
+            uv_index_.push_back(uvIndex[2]);
+            normal_index_.push_back(normalIndex[0]);
+            normal_index_.push_back(normalIndex[1]);
+            normal_index_.push_back(normalIndex[2]);
         }
 
     }
 
-    if(vertexIndex_.size() == normalIndex_.size())
+    if(vertex_index_.size() == normal_index_.size())
     {
-        for(unsigned int i = 0; i < vertexIndex_.size(); i++)
+        for(unsigned int i = 0; i < vertex_index_.size(); i++)
         {
-            glm::vec3 tempVert = vert[vertexIndex_[i]-1];
-            glm::vec3 tempNorm = norm[normalIndex_[i]-1];
-            //glm::vec2 tempUV = vert[uvIndex_[i]];
+            glm::vec3 tempVert = vert[vertex_index_[i]-1];
+            glm::vec3 tempNorm = norm[normal_index_[i]-1];
+            //glm::vec2 tempUV = vert[uv_index_[i]];
 
             Vertex temp = {tempVert, glm::vec3(0.7f, 0.7f, 0.2f), tempNorm};
 
@@ -162,11 +162,11 @@ bool Model::loadModel()
     //EXPERIMENTAL AND UNTESTED
     else
     {
-        for(int i = 0; i < vertexIndex_.size(); i+=3)
+        for(int i = 0; i < vertex_index_.size(); i+=3)
         {
-            GLuint a = vertexIndex_[i-1];
-            GLuint b = vertexIndex_[i];
-            GLuint c = vertexIndex_[i+1];
+            GLuint a = vertex_index_[i-1];
+            GLuint b = vertex_index_[i];
+            GLuint c = vertex_index_[i+1];
 
             glm::vec3 normal = glm::normalize(glm::cross(
                     glm::vec3(vert[b]) - glm::vec3(vert[a]),
@@ -193,5 +193,5 @@ void Model::initBuffer()
 
 //    glGenBuffers(1, &idNBO_);
 //    glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
-//    glBufferData(GL_ARRAY_BUFFER, normalIndex_.size() * sizeof(glm::vec3), &vertices_.front(), GL_STATIC_DRAW);
+//    glBufferData(GL_ARRAY_BUFFER, normal_index_.size() * sizeof(glm::vec3), &vertices_.front(), GL_STATIC_DRAW);
 }

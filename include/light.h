@@ -29,8 +29,8 @@ private:
     glm::vec3 diffuse_;
     glm::vec3 specular_;
 
-    bool isSpot_;
-    bool isOmniDirectional_;
+    bool is_spot_;
+    bool is_omni_directional_;
 };
 
 #endif // LIGHT_H

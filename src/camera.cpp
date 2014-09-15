@@ -12,10 +12,10 @@ Camera::Camera()
     position_ = glm::vec3(0.0f, 0.0f, -5.0f);
     matrix_ = glm::mat4();
     rotation_ = glm::mat4();
-    moveVector_ = glm::vec3();
-    upVector_ = glm::vec3(0.0f, 1.0f, 0.0f);
-    rightVector_ = glm::vec3(1.0f, 0.0f, 0.0f);
-    lookAt_ = glm::vec3(0.0f, 0.0f, 0.0f);
+    move_vector_ = glm::vec3();
+    up_vector_ = glm::vec3(0.0f, 1.0f, 0.0f);
+    right_vector_ = glm::vec3(1.0f, 0.0f, 0.0f);
+    look_at_ = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 glm::mat4 Camera::getMatrix()
@@ -35,7 +35,7 @@ glm::vec3 Camera::getPosition()
 
 void Camera::setLookAt(glm::vec3 newLookAt)
 {
-    lookAt_ = newLookAt;
+    look_at_ = newLookAt;
 }
 
 void Camera::setPosition(glm::vec3 newPos)
@@ -59,10 +59,10 @@ void Camera::init()
 
 void Camera::update()
 {
-    position_ += moveVector_;
+    position_ += move_vector_;
 
-    view_ = glm::lookAt(lookAt_, position_, upVector_);
-    matrix_ = glm::translate(matrix_, moveVector_);
+    view_ = glm::lookAt(look_at_, position_, up_vector_);
+    matrix_ = glm::translate(matrix_, move_vector_);
     matrix_ *= rotation_;
 
 
@@ -72,47 +72,47 @@ void Camera::update()
 //    std::cout << matrix_[2][0] << "," << matrix_[2][1] << "," << matrix_[2][2] << "," << matrix_[2][3] << std::endl;
 //    std::cout << matrix_[3][0] << "," << matrix_[3][1] << "," << matrix_[3][2] << "," << matrix_[3][3] << std::endl;
 //    std::cout << position_[0] << "," << position_[1] << "," << position_[2] << std::endl;
-    moveVector_ = glm::vec3();
+    move_vector_ = glm::vec3();
     rotation_ = glm::mat4();
 }
 
 void Camera::moveRight()
 {
-    //moveVector_ += glm::vec3(-0.10f, 0.0f, 0.0f);
-    glm::vec3 temp = glm::cross(position_, upVector_);
+    //move_vector_ += glm::vec3(-0.10f, 0.0f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, up_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.2f;
 
-    moveVector_ += temp;
+    move_vector_ += temp;
 }
 void Camera::moveLeft()
 {
-    //moveVector_ += glm::vec3(0.10f, 0.0f, 0.0f);
-    glm::vec3 temp = glm::cross(position_, upVector_);
+    //move_vector_ += glm::vec3(0.10f, 0.0f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, up_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.2f;
 
-    moveVector_ -= temp;
+    move_vector_ -= temp;
 }
 void Camera::moveUp()
 {
-//    moveVector_ += glm::vec3(0.0f, -0.10f, 0.0f);
-    glm::vec3 temp = glm::cross(position_, rightVector_);
+//    move_vector_ += glm::vec3(0.0f, -0.10f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, right_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.1f;
 
-    moveVector_ -= temp;
+    move_vector_ -= temp;
 }
 void Camera::moveDown()
 {
-//    moveVector_ += glm::vec3(0.0f, 0.10f, 0.0f);
+//    move_vector_ += glm::vec3(0.0f, 0.10f, 0.0f);
 
-    //moveVector_ += glm::vec3(0.10f, 0.0f, 0.0f);
-    glm::vec3 temp = glm::cross(position_, rightVector_);
+    //move_vector_ += glm::vec3(0.10f, 0.0f, 0.0f);
+    glm::vec3 temp = glm::cross(position_, right_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.1f;
 
-    moveVector_ += temp;
+    move_vector_ += temp;
 }
 void Camera::moveForward()
 {
@@ -128,7 +128,7 @@ void Camera::zoomIn()
         temp = glm::normalize(temp);
         //std::cout << temp[0] << "," << temp[1] << "," << temp[2] << std::endl;
 
-        moveVector_ -= temp;
+        move_vector_ -= temp;
         //position_ -= temp;
         //matrix_ = glm::translate(matrix_, -temp);
     }
@@ -136,7 +136,7 @@ void Camera::zoomIn()
 //    {
 //       zoom_ -= 0.02;
 //    }
-    //moveVector_ += glm::vec3(0.0f, 0.0f, 1.0f);
+    //move_vector_ += glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
 void Camera::zoomOut()
@@ -150,11 +150,11 @@ void Camera::zoomOut()
     if(glm::length(temp) < 10)
     {
         temp = glm::normalize(temp);
-        moveVector_ += temp;
+        move_vector_ += temp;
         //position_ += temp;
         //matrix_ = glm::translate(matrix_, temp);
     }
-    //moveVector_ -= glm::vec3(0.0f, 0.0f, 1.0f);
+    //move_vector_ -= glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
 void Camera::rotateCamera(glm::vec3 eulerAngles)

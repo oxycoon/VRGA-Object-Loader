@@ -68,17 +68,17 @@ bool Shader::initShader(char *path)
         return false;
     }
 
-    vsSource_ = (GLchar*)malloc(vSize);
-    fsSource_ = (GLchar*)malloc(fSize);
+    vs_source_ = (GLchar*)malloc(vSize);
+    fs_source_ = (GLchar*)malloc(fSize);
 
     //read our shaders
-    if(!readShader(path, V_SHADER, vsSource_, vSize))
+    if(!readShader(path, V_SHADER, vs_source_, vSize))
     {
         cout << "Cannot read file " << path << ".vert" << std::endl;
         return false;
     }
 
-    if(!readShader(path, F_SHADER, fsSource_, fSize))
+    if(!readShader(path, F_SHADER, fs_source_, fSize))
     {
         cout << "Cannot read file " << path << ".frag" << std::endl;
         return false;
@@ -94,8 +94,8 @@ bool Shader::initShader(char *path)
     vs_ = glCreateShader(GL_VERTEX_SHADER);
     fs_ = glCreateShader(GL_FRAGMENT_SHADER);
 
-    const char *vertS = vsSource_;
-    const char *fragS = fsSource_;
+    const char *vertS = vs_source_;
+    const char *fragS = fs_source_;
 
     //Load shader source
     glShaderSource(vs_, 1, &vertS, 0);
