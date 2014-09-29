@@ -25,6 +25,7 @@
 
 #include "shadermanager.h"
 
+//Forward declarations
 class Camera;
 class Model;
 class Light;

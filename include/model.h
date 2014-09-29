@@ -51,8 +51,6 @@ private:
     std::vector<GLuint> normal_index_;
     GLuint id_, idVBO_, idIBO_, idNBO_;
 
-    //Scene* scene_;
-
     char* path;
     bool hide;
 

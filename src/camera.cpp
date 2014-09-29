@@ -18,26 +18,56 @@ Camera::Camera()
     look_at_ = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
+/**
+ * @brief Camera::getMatrix
+ * @return The camera world matrix
+ *
+ *  Gets the camera's world matrix.
+ */
 glm::mat4 Camera::getMatrix()
 {
     return matrix_;
 }
 
+/**
+ * @brief Camera::getViewMatrix
+ * @return The camera view matrix.
+ *
+ *  Gets the camera's viwe matrix.
+ */
 glm::mat4 Camera::getViewMatrix()
 {
     return view_;
 }
 
+/**
+ * @brief Camera::getPosition
+ * @return The camera position
+ *
+ *  Gets the camera position in the world.
+ */
 glm::vec3 Camera::getPosition()
 {
     return position_;
 }
 
+/**
+ * @brief Camera::setLookAt
+ * @param newLookAt
+ *
+ *  Sets a new look at for the camera.
+ */
 void Camera::setLookAt(glm::vec3 newLookAt)
 {
     look_at_ = newLookAt;
 }
 
+/**
+ * @brief Camera::setPosition
+ * @param newPos
+ *
+ *  Sets a new position for the camera
+ */
 void Camera::setPosition(glm::vec3 newPos)
 {
     glm::vec3 translate = position_ - newPos;
@@ -45,18 +75,34 @@ void Camera::setPosition(glm::vec3 newPos)
     position_ = newPos;
 }
 
+/**
+ * @brief Camera::setProjection
+ * @param projection
+ *
+ *  Sets a new projection matrix for the camera.
+ */
 void Camera::setProjection(glm::mat4 projection)
 {
     projection_ = projection;
 }
 
+/**
+ * @brief Camera::init
+ *
+ *  Initializes the camera for the first time, putting the camera in
+ *  the starting position.
+ */
 void Camera::init()
 {
     matrix_ = glm::translate(matrix_, position_);
 }
 
-
-
+/**
+ * @brief Camera::update
+ *
+ *  Updates the camera position from the movement vectors and rotation
+ *  matrix. Then resets the two for the next update cycle.
+ */
 void Camera::update()
 {
     position_ += move_vector_;
@@ -65,105 +111,107 @@ void Camera::update()
     matrix_ = glm::translate(matrix_, move_vector_);
     matrix_ *= rotation_;
 
-
-//    std::cout << "---------------------------" << std::endl;
-//    std::cout << matrix_[0][0] << "," << matrix_[0][1] << "," << matrix_[0][2] << "," << matrix_[0][3] << std::endl;
-//    std::cout << matrix_[1][0] << "," << matrix_[1][1] << "," << matrix_[1][2] << "," << matrix_[1][3] << std::endl;
-//    std::cout << matrix_[2][0] << "," << matrix_[2][1] << "," << matrix_[2][2] << "," << matrix_[2][3] << std::endl;
-//    std::cout << matrix_[3][0] << "," << matrix_[3][1] << "," << matrix_[3][2] << "," << matrix_[3][3] << std::endl;
-//    std::cout << position_[0] << "," << position_[1] << "," << position_[2] << std::endl;
     move_vector_ = glm::vec3();
     rotation_ = glm::mat4();
 }
 
+/**
+ * @brief Camera::moveRight
+ *
+ *  Moves the camera to the right, rotating to the right around
+ *  the look at point.
+ */
 void Camera::moveRight()
 {
-    //move_vector_ += glm::vec3(-0.10f, 0.0f, 0.0f);
     glm::vec3 temp = glm::cross(position_, up_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.2f;
 
     move_vector_ += temp;
 }
+
+/**
+ * @brief Camera::moveLeft
+ *
+ *  Moves the camera to the left, rotating to the left around
+ *  the look at point.
+ */
 void Camera::moveLeft()
 {
-    //move_vector_ += glm::vec3(0.10f, 0.0f, 0.0f);
     glm::vec3 temp = glm::cross(position_, up_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.2f;
 
     move_vector_ -= temp;
 }
+
+/**
+ * @brief Camera::moveUp
+ *
+ *  Moves the camera upwards
+ */
 void Camera::moveUp()
 {
-//    move_vector_ += glm::vec3(0.0f, -0.10f, 0.0f);
     glm::vec3 temp = glm::cross(position_, right_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.1f;
 
     move_vector_ -= temp;
 }
+
+/**
+ * @brief Camera::moveDown
+ *
+ *  Moves the camera downwards
+ */
 void Camera::moveDown()
 {
-//    move_vector_ += glm::vec3(0.0f, 0.10f, 0.0f);
-
-    //move_vector_ += glm::vec3(0.10f, 0.0f, 0.0f);
     glm::vec3 temp = glm::cross(position_, right_vector_);
     temp  = glm::normalize(temp);
     temp *= -0.1f;
 
     move_vector_ += temp;
 }
-void Camera::moveForward()
-{
-    //matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, 2.0f));
-}
 
+/**
+ * @brief Camera::zoomIn
+ *
+ *  "Zooms" the camera closer to the object
+ */
 void Camera::zoomIn()
 {
-    //glm::vec3 temp(matrix_[3][0], matrix_[3][1],matrix_[3][2]);
     glm::vec3 temp(position_);
     if(glm::length(temp) > 2)
     {
         temp = glm::normalize(temp);
-        //std::cout << temp[0] << "," << temp[1] << "," << temp[2] << std::endl;
 
         move_vector_ -= temp;
-        //position_ -= temp;
-        //matrix_ = glm::translate(matrix_, -temp);
     }
-//    if(zoom_ > 0.5)
-//    {
-//       zoom_ -= 0.02;
-//    }
-    //move_vector_ += glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
+/**
+ * @brief Camera::zoomOut
+ *
+ *  "Zooms" the camera away from the object
+ */
 void Camera::zoomOut()
 {
-//    if(zoom_ < 1.5)
-//    {
-//       zoom_ += 0.02;
-//    }
-    //glm::vec3 temp(matrix_[3][0], matrix_[3][1],matrix_[3][2]);
     glm::vec3 temp(position_);
     if(glm::length(temp) < 10)
     {
         temp = glm::normalize(temp);
         move_vector_ += temp;
-        //position_ += temp;
-        //matrix_ = glm::translate(matrix_, temp);
     }
-    //move_vector_ -= glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
+/**
+ * @brief Camera::rotateCamera
+ * @param eulerAngles
+ *
+ *  Rotates the camera using euler angles and quaterions.
+ */
 void Camera::rotateCamera(glm::vec3 eulerAngles)
 {
     quaterion_ = glm::quat(eulerAngles);
     rotation_ = glm::toMat4(quaterion_);
-}
-
-void Camera::moveBackward()
-{
-  matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -2.0f));
 }

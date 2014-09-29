@@ -7,6 +7,11 @@
 #include <stddef.h>
 #include <cmath>
 
+/**
+ * @brief Model::Model
+ *
+ *  Constructor where path to model is not specified.
+ */
 Model::Model()
 {
     path = "";
@@ -14,6 +19,12 @@ Model::Model()
     hide = false;
 }
 
+/**
+ * @brief Model::Model
+ * @param path to the model
+ *
+ *  Constructor where path to model is specified.
+ */
 Model::Model(char *path) : path(path)
 {
     matrix_ = glm::mat4();
@@ -30,9 +41,13 @@ void Model::toggleHide()
     hide ? hide = false : hide = true;
 }
 
+/**
+ * @brief Model::init
+ * @return true if model has been successfully loaded, otherwise false.
+ */
 bool Model::init()
 {
-    //If there's no model to load or load fails, model becomes box
+    //Returns false if there's no model to load
     if(!loadModel())
     {
         return false;
@@ -42,6 +57,11 @@ bool Model::init()
     return true;
 }
 
+/**
+ * @brief Model::render
+ *
+ *  Renders the model
+ */
 void Model::render()
 {
     if(!hide)
@@ -54,7 +74,6 @@ void Model::render()
         glEnableVertexAttribArray(2);
 
         glBindBuffer(GL_ARRAY_BUFFER, idVBO_);
-        //glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
         glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
         glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, color));
         glVertexAttribPointer((GLuint)2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
@@ -75,6 +94,11 @@ void Model::update()
 
 /**
  * @brief Model::loadModel
+ * @return true if load is succesful, otherwise false
+ *
+ *  Loads the model from the path given by the object. Currently limited to what i can load, but
+ *  will give notice if it's a file it cannot load before returning false. Will also return false
+ *  on bogus files.
  *
  *  Original source: http://www.opengl-tutorial.org/beginners-tutorials/tutorial-7-model-loading/
  *  Modified to fit.
@@ -151,11 +175,6 @@ bool Model::loadModel()
 
             Vertex temp = {tempVert, glm::vec3(0.7f, 0.7f, 0.2f), tempNorm};
 
-//            printf("Vertex created: (%f,%f,%f), (%f,%f,%f), (%f,%f,%f)\n",
-//                   temp.position.x, temp.position.y, temp.position.z,
-//                   temp.color.x, temp.color.y, temp.color.z,
-//                   temp.normal.x, temp.normal.y, temp.normal.z);
-
             vertices_.push_back(temp);
         }
     }
@@ -184,14 +203,14 @@ bool Model::loadModel()
     return true;
 }
 
+/**
+ * @brief Model::initBuffer
+ *
+ *  Initializes the buffer object.
+ */
 void Model::initBuffer()
 {
     glGenBuffers(1, &idVBO_);
     glBindBuffer(GL_ARRAY_BUFFER, idVBO_);
     glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof (Vertex), vertices_.data(), GL_STATIC_DRAW);
-
-
-//    glGenBuffers(1, &idNBO_);
-//    glBindBuffer(GL_ARRAY_BUFFER, idNBO_);
-//    glBufferData(GL_ARRAY_BUFFER, normal_index_.size() * sizeof(glm::vec3), &vertices_.front(), GL_STATIC_DRAW);
 }

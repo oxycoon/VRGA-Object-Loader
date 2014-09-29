@@ -77,13 +77,10 @@ void Scene::modelCycle()
 
 void Scene::render()
 {
-    //glPushMatrix();
-    //world_ = glm::translate(world_, glm::vec3(0.f, 0.f, -5.0f));
     glm::mat4 mvp = projection_ * camera_->getViewMatrix() * world_;
+
     // Bind our modelmatrix variable to be a uniform called mvpmatrix
     // in our shaderprogram
-    //glMultMatrixf(glm::value_ptr(mvp));
-
     glUniformMatrix4fv(glGetUniformLocation(shader_manager_.getActiveProg(), "mvpmatrix"), 1,
                        GL_FALSE, glm::value_ptr(mvp));
 
@@ -155,14 +152,12 @@ void Scene::render()
     for(std::vector<std::shared_ptr<Model> >::iterator it = scene_objects_.begin();
         it != scene_objects_.end(); it++)
         (*it)->render();
-    //glPopMatrix();
 }
 
 void Scene::update()
 {
     camera_->update();
     world_ = camera_->getMatrix();
-    //world_ = glm::mat4();
 
     //Adds new scene objects to the scene.
     for(std::vector<std::shared_ptr<Model> >::iterator it = new_children_.begin();

@@ -39,8 +39,6 @@ public:
     void moveLeft();
     void moveUp();
     void moveDown();
-    void moveBackward();
-    void moveForward();
     void zoomIn();
     void zoomOut();
     void rotateCamera(glm::vec3 eulerAngles);
